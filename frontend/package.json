@@ -27,6 +27,7 @@
     "@shadcn/ui": "^0.0.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^11.0.2",
     "livekit-client": "^2.6.1",
     "livekit-server-sdk": "^2.8.1",
     "lucide-react": "^0.460.0",
