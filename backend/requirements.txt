@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+livekit-server-sdk-python
+python-dotenv

@@ -23,14 +23,17 @@ The system consists of the following key components:
 ## Tech Stack
 
 ### Frontend
-- Svelte - A modern reactive JavaScript framework
+- Next.js
+- WebRTC API
 
 ### Backend
-- FastAPI - High-performance Python web framework
-- Apache Kafka - Distributed message streaming platform
-- MongoDB - Document database with vector search capabilities
-- LangChain - Framework for developing LLM-powered applications
-- OpenAI API - AI language model integration
+- FastAPI
+- Apache Kafka
+- MongoDB
+- LangChain
+- OpenAI API
+
+## 
 
 ## Getting Started
 
