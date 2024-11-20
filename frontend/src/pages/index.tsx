@@ -2,7 +2,7 @@ import BackgroundIllustration from "@/components/custom/BackgroundIllustration";
 import { Header } from "@/components/layout/Header";
 import { PrimaryButton } from "@/components/base/Buttons";
 import { Badge } from "@/components/ui/badge";
-// import { YoutubeEmbed } from "@/components/custom/YoutubeEmbed";
+import Image from "next/image";
 
 export const HeroSection = () => (
   <section className="flex items-center justify-center text-center relative h-[calc(100vh-120px)]">
@@ -133,10 +133,12 @@ export const SocialProofSection = () => (
             <div key={index} className="bg-gray-900/50 rounded-xl p-8">
               <p className="text-xl mb-6">{testimonial.quote}</p>
               <div className="flex items-center gap-4">
-                <img 
+                <Image 
                   src={testimonial.avatar} 
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
                 />
                 <div>
                   <div className="font-semibold">{testimonial.name}</div>

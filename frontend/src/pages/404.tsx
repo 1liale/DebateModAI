@@ -17,7 +17,7 @@ export default function Page() {
             Access Denied
           </h2>
           <p className="text-xl mb-8 text-gray-400 max-w-2xl mx-auto">
-            It seems you don't have permission to access this page. Please sign in to continue.
+            It seems you don&apos;t have permission to access this page. Please sign in to continue.
           </p>
           <Link href="/">
             <PrimaryButton>
