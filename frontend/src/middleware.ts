@@ -1,8 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-// Define public routes that don't require authentication
-const isProtectedRoute = createRouteMatcher(["/room(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/app(.*)", "/api(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {

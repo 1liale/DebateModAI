@@ -1,5 +1,3 @@
-import BackgroundIllustration from "@/components/custom/BackgroundIllustration";
-import { Header } from "@/components/layout/Header";
 import { PrimaryButton } from "@/components/base/Buttons";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -179,28 +177,13 @@ const testimonials = [
   }
 ];
 
-export const Footer = () => (
-  <footer className="fixed bottom-0 w-full border-gray-800/20 py-4 backdrop-blur-sm">
-    <div className="container mx-auto px-4 text-center text-sm text-gray-500">
-      © 2024 DebateModAI. All rights reserved.
-    </div>
-  </footer>
-);
-
 export default function Page() {
   return (
-    <>
-      <BackgroundIllustration multiple />
-      <div className="min-h-screen pt-[80px] pb-[40px]">
-        <Header />
-        <main>
-          <HeroSection />
-          <HowItWorksSection />
-          <BenefitsSection />
-          <SocialProofSection />
-        </main>
-      </div>
-      <Footer />
-    </>
+    <main className="pt-[80px] pb-[40px]">
+      <HeroSection />
+      <HowItWorksSection />
+      <BenefitsSection />
+      <SocialProofSection />
+    </main>
   );
 }

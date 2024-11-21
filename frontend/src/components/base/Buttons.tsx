@@ -45,13 +45,14 @@ export const LinkButton = ({
   variant = "link",
   ...props
 }: ButtonProps & { href: string }) => (
-  <Link href={href} className={cn(buttonVariants.link, className)}>
-    <Button
-      variant={variant}
-      className={cn(buttonVariants.link, className)}
-      {...props}
-    >
+  <Button
+    variant={variant}
+    className={cn(buttonVariants.link, className)}
+    asChild
+    {...props}
+  >
+    <Link href={href}>
       {children}
-    </Button>
-  </Link>
+    </Link>
+  </Button>
 );

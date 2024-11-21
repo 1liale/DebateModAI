@@ -29,7 +29,7 @@ export const MobileMenu = ({ pathname }: MobileMenuProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden relative">
+        <Button variant="ghost" size="icon" className="lg:hidden relative w-10 h-10 p-0 m-0">
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>

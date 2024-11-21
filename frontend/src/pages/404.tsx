@@ -1,6 +1,6 @@
 import { PrimaryButton } from "@/components/base/Buttons";
 import Link from "next/link";
-import BackgroundIllustration from "@/components/custom/BackgroundIllustration";
+import BackgroundIllustration from "@/components/misc/BackgroundIllustration";
 import { Header } from "@/components/layout/Header";
 
 export default function Page() {
@@ -13,11 +13,11 @@ export default function Page() {
           <h1 className="text-7xl font-bold mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
             404
           </h1>
-          <h2 className="text-3xl font-semibold mb-6 text-gray-300">
-            Access Denied
+          <h2 className="text-2xl font-semibold mb-6 text-gray-300">
+            Access Denied / Page Not Found
           </h2>
           <p className="text-xl mb-8 text-gray-400 max-w-2xl mx-auto">
-            It seems you don&apos;t have permission to access this page. Please sign in to continue.
+            This page doesn't exist or you don't have permission to access it. Please sign in or check the URL.
           </p>
           <Link href="/">
             <PrimaryButton>

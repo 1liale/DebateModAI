@@ -3,6 +3,11 @@ import "@/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import BackgroundIllustration from "@/components/misc/BackgroundIllustration";
+import { Sidebar } from "@/components/layout/SideBar";
+import { useRouter } from "next/router";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,10 +43,27 @@ const nacelle = localFont({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const isAuthRoute = router.pathname.startsWith("/app");
+
   return (
     <ClerkProvider afterSignOutUrl="/">
-      <div className={`${inter.variable} ${nacelle.variable} font-inter`}>
-        <Component {...pageProps} />
+      <div className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}>
+        {!isAuthRoute ? (
+          <>
+            <BackgroundIllustration multiple />
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </>
+        ) : (
+          <div className="flex h-screen">
+            <Sidebar key={router.asPath} />
+            <div className="flex-1 overflow-auto">
+              <Component {...pageProps} />
+            </div>
+          </div>
+        )}
       </div>
     </ClerkProvider>
   );
