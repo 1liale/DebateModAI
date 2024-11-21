@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useClerk } from "@clerk/nextjs"
 import { useRouter } from 'next/router'
+import { useTheme } from "next-themes"
+import { ThemeSwitch } from "@/components/misc/ThemeWidget"
 
 type MenuItem = {
   section?: string;
@@ -12,12 +14,12 @@ type MenuItem = {
 }
 
 const menuItems: MenuItem[] = [
-  { section: 'Main' },
-  { title: "Dashboard", icon: Home, url: "/app/dashboard" },
-  { title: "Conferences", icon: User, url: "/app/conferences" },
-  { title: "Documents", icon: FileText, url: "/app/documents" },
-  { title: "Calendar", icon: Calendar, url: "/app/calendar" },
-  { title: "Settings", icon: Settings, url: "/app/settings" },
+  { title: "Home", icon: Home, url: "/app/dashboard" },
+  { title: "Products", icon: FileText, url: "/app/products" },
+  { title: "Customers", icon: User, url: "/app/customers" },
+  { title: "Shop", icon: Calendar, url: "/app/shop" },
+  { title: "Income", icon: Settings, url: "/app/income" },
+  { title: "Promote", icon: Settings, url: "/app/promote" },
 ]
 
 export function Sidebar() {
@@ -34,55 +36,61 @@ export function Sidebar() {
     <aside className={`relative h-full flex-shrink-0 transition-all duration-300 ${
       isOpen ? 'w-64' : 'w-20'
     }`}>
-      <div className="h-screen flex flex-col items-stretch justify-start bg-[#1e1f2e]">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="absolute -right-3 top-4 z-10 rounded-full bg-[#1e1f2e] p-1 shadow-md hover:bg-gray-700"
-        >
-          {isOpen ? <ChevronLeft className="h-4 w-4 text-gray-300" /> : <ChevronRight className="h-4 w-4 text-gray-300" />}
-        </button>
-
-        <div className="flex h-full flex-col items-stretch justify-start px-6 py-6">
-          <div className={`mb-8 ${isOpen ? 'pr-16' : 'pr-2'}`}>
+      <div className="h-screen flex flex-col items-stretch justify-start bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+        <div className="flex h-full flex-col items-stretch justify-start px-4 py-4">
+          <div className="mb-8">
             <Link href="/app">
-              <span className={`text-xl font-bold text-white ${!isOpen && 'hidden'}`}>Teams Call</span>
-              {!isOpen && <span className="text-xl font-bold text-white">TC</span>}
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                {isOpen ? 'Dashboard' : 'D'}
+              </span>
             </Link>
           </div>
           
-          <div className="flex flex-col items-stretch space-y-2">
+          <div className="flex flex-col items-stretch space-y-1">
             {menuItems.map((item, index) => (
-              <div key={index}>
-                {!item.section && (
-                  <Link href={item.url || '#'}>
-                    <button 
-                      className={`flex w-full items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
-                        router.pathname === item.url 
-                          ? 'bg-[#4f46e5] text-white' 
-                          : 'hover:bg-[#282a3a] text-gray-400 hover:text-gray-200'
-                      }`}
-                    >
-                      {item.icon && (
-                        <item.icon className={`h-5 w-5 ${
-                          router.pathname === item.url ? 'text-white' : 'text-gray-400'
-                        }`} 
-                      />
-                      )}
-                      {isOpen && <span className="text-sm">{item.title}</span>}
-                    </button>
-                  </Link>
-                )}
-              </div>
+              <Link key={index} href={item.url || '#'}>
+                <button 
+                  className={`flex w-full items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    router.pathname === item.url 
+                      ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white' 
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {item.icon && (
+                    <item.icon className={`h-5 w-5 ${
+                      router.pathname === item.url 
+                        ? 'text-gray-900 dark:text-white' 
+                        : 'text-gray-500 dark:text-gray-400'
+                    }`} 
+                  />
+                  )}
+                  {isOpen && <span className="text-sm font-medium">{item.title}</span>}
+                </button>
+              </Link>
             ))}
           </div>
           
           <div className="flex-grow" />
+          
+          <Link href="/help">
+            <button className="flex w-full items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+              <Settings className="h-5 w-5" />
+              {isOpen && <span className="text-sm font-medium">Help & getting started</span>}
+            </button>
+          </Link>
+
+          {isOpen && (
+            <div className="mt-4 px-3">
+              <ThemeSwitch />
+            </div>
+          )}
+          
           <button 
-            className="flex items-center gap-3 px-4 py-2.5 text-gray-400 hover:text-gray-200 hover:bg-[#282a3a] rounded-lg"
+            className="mt-4 flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5" />
-            {isOpen && <span className="text-sm">Logout</span>}
+            {isOpen && <span className="text-sm font-medium">Logout</span>}
           </button>
         </div>
       </div>

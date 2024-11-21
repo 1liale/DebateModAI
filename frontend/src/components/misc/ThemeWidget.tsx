@@ -26,22 +26,31 @@ export function ThemeSwitch() {
 
   return (
     <div
-      className="flex items-center gap-2 rounded-full bg-white dark:bg-gray-800 px-1 py-1 shadow-sm border border-gray-200 dark:border-gray-700"
+      className="relative flex items-center w-full rounded-full bg-white dark:bg-gray-800 px-2 py-1 shadow-sm border border-gray-200 dark:border-gray-700 cursor-pointer"
       role="button"
-      onClick={() => setTheme( theme === "light" ? "dark" : "light")}
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       aria-label="Toggle theme"
     >
+      {/* Sliding background */}
       <div
-        className={`flex items-center justify-center w-6 h-6 rounded-full transition-colors duration-200
-          ${theme === 'light' ? 'bg-gray-100' : ''}`}
-      >
-        <Sun className={`h-4 w-4 ${theme === 'light' ? 'text-gray-900' : 'text-gray-400'}`} />
-      </div>
-      <div
-        className={`flex items-center justify-center w-6 h-6 rounded-full transition-colors duration-200
-          ${!theme || theme === 'dark' ? 'bg-gray-700' : ''}`}
-      >
-        <Moon className={`h-4 w-4 ${!theme ||theme === 'dark' ? 'text-gray-200' : 'text-gray-400'}`} />
+        className={`absolute inset-[4px] w-[calc(50%-4px)] rounded-full transition-all duration-300 ease-in-out
+          ${theme === 'light' ? 'left-[4px] bg-gray-100' : 'left-[calc(50%)] bg-gray-700'}`}
+      />
+      
+      {/* Content container */}
+      <div className="relative flex w-full">
+        <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
+          <Sun className={`h-4 w-4 transition-colors duration-200 ${theme === 'light' ? 'text-gray-900' : 'text-gray-400'}`} />
+          <span className={`text-sm transition-colors duration-200 ${theme === 'light' ? 'text-gray-900' : 'text-gray-400'}`}>
+            Light
+          </span>
+        </div>
+        <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
+          <Moon className={`h-4 w-4 transition-colors duration-200 ${!theme || theme === 'dark' ? 'text-gray-200' : 'text-gray-400'}`} />
+          <span className={`text-sm transition-colors duration-200 ${!theme || theme === 'dark' ? 'text-gray-200' : 'text-gray-400'}`}>
+            Dark
+          </span>
+        </div>
       </div>
     </div>
   )
