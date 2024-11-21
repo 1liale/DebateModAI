@@ -2,16 +2,22 @@ import Image from "next/image";
 import Illustration from "@/public/images/page-illustration.svg";
 import BlurredShapeGray from "@/public/images/blurred-shape-gray.svg";
 import BlurredShape from "@/public/images/blurred-shape.svg";
+import { useTheme } from "next-themes";
 
 interface BackgroundIllustrationProps {
   multiple?: boolean;
 }
 
 export default function BackgroundIllustration({ multiple = false }: BackgroundIllustrationProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       <div
-        className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/4"
+        className={`pointer-events-none absolute left-1/2 top-0 -translate-x-1/4 ${
+          isDark ? 'opacity-100' : 'opacity-40'
+        }`}
         aria-hidden="true"
       >
         <Image
@@ -26,28 +32,24 @@ export default function BackgroundIllustration({ multiple = false }: BackgroundI
       {multiple && (
         <>
           <div
-            className="pointer-events-none absolute left-1/2 top-[400px] -mt-20 -translate-x-full opacity-50 blur-2xl"
+            className={`pointer-events-none absolute left-1/2 top-[400px] -mt-20 -translate-x-full blur-2xl`}
             aria-hidden="true"
           >
-            <Image
-              className="max-w-none"
-              src={BlurredShapeGray}
-              width={760}
-              height={668}
-              alt="Blurred shape"
-            />
+            <div className={`w-[760px] h-[668px] rounded-full ${
+              isDark 
+                ? 'bg-gray-800/30' 
+                : 'bg-blue-50/30 dark:bg-blue-900/20'
+            }`} />
           </div>
           <div
-            className="pointer-events-none absolute left-1/2 top-[440px] -translate-x-1/3 blur-2xl"
+            className={`pointer-events-none absolute left-1/2 top-[440px] -translate-x-1/3 blur-2xl`}
             aria-hidden="true"
           >
-            <Image
-              className="max-w-none"
-              src={BlurredShape}
-              width={760}
-              height={668}
-              alt="Blurred shape"
-            />
+            <div className={`w-[760px] h-[668px] rounded-full ${
+              isDark 
+                ? 'bg-indigo-900/20' 
+                : 'bg-indigo-50/30 dark:bg-indigo-900/20'
+            }`} />
           </div>
         </>
       )}

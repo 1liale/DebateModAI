@@ -3,9 +3,9 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import Link from "next/link";
 
 export const buttonVariants = {
-  primary: "border border-gray-700 bg-transparent hover:border-gray-800/50",
-  secondary: "bg-indigo-800/90 hover:bg-indigo-700",
-  link: "text-white hover:bg-gray-800/50",
+  primary: "border border-gray-700/50 hover:border-gray-800 bg-transparent hover:border-gray-800/50",
+  secondary: "bg-indigo-200 hover:bg-indigo-300 text-indigo-900 dark:bg-indigo-800/90 hover:dark:bg-indigo-700 dark:text-white",
+  link: "dark:hover:bg-gray-800/50 hover:bg-gray-200/50",
 };
 
 export const PrimaryButton = ({

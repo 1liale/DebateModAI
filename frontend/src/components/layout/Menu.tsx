@@ -39,7 +39,9 @@ export const MobileMenu = ({ pathname }: MobileMenuProps) => {
         onPointerDownOutside={(e) => e.preventDefault()}
       >
         <div className="flex justify-between items-center mb-4">
-          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <SheetTitle className="sr-only">
+            Navigation Menu
+          </SheetTitle>
           <SheetTrigger asChild></SheetTrigger>
         </div>
         <div className="flex flex-col space-y-4 items-start p-2">
@@ -56,9 +58,9 @@ export const MobileMenu = ({ pathname }: MobileMenuProps) => {
             Contact Us
           </LinkButton>
           <SignedIn>
-            {pathname !== "/dashboard" && (
+            {!pathname.startsWith("/app") && (
               <LinkButton
-                href="/dashboard"
+                href="/app/dashboard"
                 variant="default"
                 className="w-full justify-start"
               >
@@ -110,8 +112,8 @@ export const DesktopMenu = ({ pathname }: MenuProps) => {
         Contact Us
       </LinkButton>
       <SignedIn>
-        {pathname !== "/dashboard" && (
-          <Link href="/dashboard">
+        {!pathname.startsWith("/app") && (
+          <Link href="/app/dashboard">  
             <PrimaryButton className="mr-4">
               Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
             </PrimaryButton>

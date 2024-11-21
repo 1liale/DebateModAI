@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import BackgroundIllustration from "@/components/misc/BackgroundIllustration";
 import { Sidebar } from "@/components/layout/SideBar";
 import { useRouter } from "next/router";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -47,24 +48,26 @@ export default function App({ Component, pageProps }: AppProps) {
   const isAuthRoute = router.pathname.startsWith("/app");
 
   return (
-    <ClerkProvider afterSignOutUrl="/">
-      <div className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}>
-        {!isAuthRoute ? (
-          <>
-            <BackgroundIllustration multiple />
-            <Header />
-            <Component {...pageProps} />
-            <Footer />
-          </>
-        ) : (
-          <div className="flex h-screen">
-            <Sidebar key={router.asPath} />
-            <div className="flex-1 overflow-auto">
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+      <ClerkProvider afterSignOutUrl="/">
+        <div className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}>
+          {!isAuthRoute ? (
+            <>
+              <BackgroundIllustration multiple />
+              <Header />
               <Component {...pageProps} />
+              <Footer />
+            </>
+          ) : (
+            <div className="flex h-screen">
+              <Sidebar key={router.asPath} />
+              <div className="flex-1 overflow-auto">
+                <Component {...pageProps} />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </ClerkProvider>
+          )}
+        </div>
+      </ClerkProvider>
+    </ThemeProvider>
   );
 }
