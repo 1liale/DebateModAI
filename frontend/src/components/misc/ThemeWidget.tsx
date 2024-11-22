@@ -1,12 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 export function ThemeButton({ className }: { className?: string }) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Button
@@ -19,11 +28,20 @@ export function ThemeButton({ className }: { className?: string }) {
       <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Toggle theme</span>
     </Button>
-  )
-} 
+  );
+}
 
 export function ThemeSwitch() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div
@@ -35,24 +53,42 @@ export function ThemeSwitch() {
       {/* Sliding background */}
       <div
         className={`absolute inset-[4px] w-[calc(50%-4px)] rounded-full transition-all duration-300 ease-in-out
-          ${theme === 'light' ? 'left-[4px] bg-gray-100' : 'left-[calc(50%)] bg-gray-700'}`}
+          ${
+            theme === "light"
+              ? "left-[4px] bg-gray-100"
+              : "left-[calc(50%)] bg-gray-700"
+          }`}
       />
-      
-      {/* Content container */}
       <div className="relative flex w-full">
         <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
-          <Sun className={`h-4 w-4 transition-colors duration-200 ${theme === 'light' ? 'text-gray-900' : 'text-gray-400'}`} />
-          <span className={`text-sm transition-colors duration-200 ${theme === 'light' ? 'text-gray-900' : 'text-gray-400'}`}>
+          <Sun
+            className={`h-4 w-4 transition-colors duration-200 ${
+              theme === "light" ? "text-gray-900" : "text-gray-400"
+            }`}
+          />
+          <span
+            className={`text-sm transition-colors duration-200 ${
+              theme === "light" ? "text-gray-900" : "text-gray-400"
+            }`}
+          >
             Light
           </span>
         </div>
         <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
-          <Moon className={`h-4 w-4 transition-colors duration-200 ${!theme || theme === 'dark' ? 'text-gray-200' : 'text-gray-400'}`} />
-          <span className={`text-sm transition-colors duration-200 ${!theme || theme === 'dark' ? 'text-gray-200' : 'text-gray-400'}`}>
+          <Moon
+            className={`h-4 w-4 transition-colors duration-200 ${
+              !theme || theme === "dark" ? "text-gray-200" : "text-gray-400"
+            }`}
+          />
+          <span
+            className={`text-sm transition-colors duration-200 ${
+              !theme || theme === "dark" ? "text-gray-200" : "text-gray-400"
+            }`}
+          >
             Dark
           </span>
         </div>
       </div>
     </div>
-  )
+  );
 }

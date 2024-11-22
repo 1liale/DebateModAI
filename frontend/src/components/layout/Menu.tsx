@@ -20,6 +20,11 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { customDarkTheme } from "@/styles/customTheme";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
+import { HelpCircle, LogOut } from "lucide-react";
+import { MenuItem, menuItems } from "./Sidebar";
+import { JSX, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from "react";
 
 export const MobileMenu = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -94,6 +99,63 @@ export const UnauthMobileMenu = () => {
             <SignUpButton fallbackRedirectUrl="/">Register</SignUpButton>
           </SecondaryButton>
         </SignedOut>
+      </div>
+    </MobileMenu>
+  );
+};
+
+export const AuthMobileMenu = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { signOut } = useClerk();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  return (
+    <MobileMenu>
+      <div className="flex flex-col gap-2 items-start">
+        {menuItems && menuItems.map((item: MenuItem) => (
+          <LinkButton
+            key={item.url}
+            href={item.url || "#"}
+            className={`justify-start w-full gap-3 ${
+              pathname === item.url
+                ? "bg-nav-active text-nav-text-active"
+                : "text-nav-text hover:bg-nav-hover hover:text-nav-text-active"
+            }`}
+          >
+            {item.icon && (
+              <item.icon
+                className={
+                  pathname === item.url
+                    ? "text-sidebar-text-active"
+                    : "text-sidebar-text"
+                }
+              />
+            )}
+            {item.title}
+          </LinkButton>
+        ))}
+
+        <LinkButton
+          href="/help"
+          className="justify-start w-full gap-3 text-sidebar-text hover:bg-nav-hover"
+        >
+          <HelpCircle />
+          Help & getting started
+        </LinkButton>
+
+        <Button
+          className="justify-start w-full gap-3 text-sidebar-text hover:bg-nav-hover"
+          variant="ghost"
+          onClick={handleLogout}
+        >
+          <LogOut className="h-5 w-5" />
+          Logout
+        </Button>
       </div>
     </MobileMenu>
   );

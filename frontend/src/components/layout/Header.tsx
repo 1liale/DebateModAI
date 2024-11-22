@@ -15,13 +15,15 @@ import {
   PrimaryButton,
   SecondaryButton,
 } from "@/components/base/Buttons";
-import { UnauthMobileMenu } from "@/components/layout/Menu";
-import { TypographyLarge } from "@/components/base/Typography";
+import { AuthMobileMenu, UnauthMobileMenu } from "@/components/layout/Menu";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/images/logo.svg";
 import { ThemeButton } from "../misc/ThemeWidget";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { TypographyLarge } from "../base/Typography";
+
 interface HeaderProps {
   children: ReactNode;
   className?: string;
@@ -50,18 +52,17 @@ export const UnauthHeader = () => {
   return (
     <Header>
       <div className="flex-1 flex items-center justify-between">
-        <Link href="/" className="font-bold tracking-tight flex items-center">
-          <Image
-            src={logo}
-            alt="DebateMod Logo"
-            width={24}
-            height={24}
-            className="mb-1"
-          />
-          <TypographyLarge className="text-xl">
-            ebate
-            <span className="text-brand">Mod</span>
-          </TypographyLarge>
+        {/* Logo */}
+
+        <Link href="/">
+          <div className="flex items-center">
+            <Image src={logo} alt="Logo" width={28} height={28} />
+
+            <TypographyLarge className="text-[1.25rem] pt-1">
+              ebate
+              <span className="text-brand">Mod</span>
+            </TypographyLarge>
+          </div>
         </Link>
 
         <div className="flex items-center gap-2 md:gap-3">
@@ -114,10 +115,51 @@ export const UnauthHeader = () => {
 };
 
 export const AuthHeader = () => {
+  const { theme } = useTheme();
+
   return (
     <Header className="min-h-[80px] bg-gradient-to-l from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
-      <div className="w-full flex items-center justify-between">
-        <TypographyLarge>Welcome to DebateMod</TypographyLarge>
+      <div className="w-full flex items-center justify-between gap-2">
+        <Link href="/">
+          <Image
+            src={logo}
+            alt="Logo"
+            width={30}
+            height={38}
+            className="h-8 w-auto md:hidden"
+          />
+        </Link>
+        <div className="flex-1 max-w-3xl relative">
+          <Input
+            type="text"
+            placeholder="Search / Enter command"
+            className="bg-background/50 border-border/50 focus-visible:ring-brand/50 text-ellipsis"
+          />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 text-muted-foreground pointer-events-none">
+            <span className="text-sm hidden md:block">⌘ F</span>
+          </div>
+        </div>
+
+        {/* Right side controls */}
+        <div className="flex items-center gap-3">
+          <ThemeButton className="md:hidden" />
+          <div className="hidden md:block">
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-10 w-10",
+                  userButtonPopoverCard: {
+                    pointerEvents: "initial",
+                    zIndex: 100,
+                    marginTop: "16px",
+                  },
+                },
+                baseTheme: theme === "dark" ? customDarkTheme : undefined,
+              }}
+            />
+          </div>
+          <AuthMobileMenu />
+        </div>
       </div>
     </Header>
   );

@@ -19,14 +19,14 @@ import { TypographyLarge } from "@/components/base/Typography";
 import { LinkButton } from "@/components/base/Buttons";
 import { Button } from "@/components/ui/button";
 
-type MenuItem = {
+export type MenuItem = {
   section?: string;
   title?: string;
   icon?: React.ElementType;
   url?: string;
 };
 
-const menuItems: MenuItem[] = [
+export const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: Home, url: "/app/dashboard" },
   { title: "Room", icon: Phone, url: "/app/room" },
 ];
@@ -54,16 +54,16 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`relative h-full flex-shrink-0 transition-all duration-300 ease-in-out cursor-pointer hidden md:block ${
+      className={`relative h-full border-r border-nav-border flex-shrink-0 transition-all duration-300 ease-in-out cursor-pointer hidden md:block ${
         isOpen ? "w-[250px]" : "w-[62px]"
       }`}
       onClick={handleSidebarClick}
     >
       <div className="h-screen flex flex-col bg-gradient-to-t from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] border-nav-border overflow-hidden">
-        <div className="h-[80px] border-b border-nav-border p-4 mb-4 flex items-center justify-between">
+        <div className="h-[80px] border-b border-nav-border p-3 mb-4 ml-1 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center">
-              <Image src={logo} alt="Logo" width={32} height={32} />
+              <Image src={logo} alt="Logo" width={30} height={38} />
               {isOpen && (
                 <TypographyLarge className="text-[1.5rem] pt-1">
                   ebate

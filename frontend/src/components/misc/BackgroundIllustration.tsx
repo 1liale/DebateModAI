@@ -17,6 +17,9 @@ export default function BackgroundIllustration({ multiple = false }: BackgroundI
     setMounted(true);
   }, []);
 
+  // Don't render anything until mounted to avoid hydration mismatch
+  if (!mounted) return null;
+
   // Don't render opacity classes until mounted to avoid hydration mismatch
   const opacityClass = mounted ? (theme === 'dark' ? 'opacity-100' : 'opacity-40') : 'opacity-40';
 
