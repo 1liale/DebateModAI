@@ -1,5 +1,3 @@
-"use client";
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
@@ -23,8 +21,12 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useClerk } from "@clerk/nextjs";
 import { HelpCircle, LogOut } from "lucide-react";
-import { MenuItem, menuItems } from "./Sidebar";
-import { JSX, ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, Key } from "react";
+import { Home, Phone } from "lucide-react";
+
+const menuItems = [
+  { title: "Dashboard", icon: Home, url: "/app/dashboard" },
+  { title: "Room", icon: Phone, url: "/app/room" },
+];
 
 export const MobileMenu = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -117,10 +119,10 @@ export const AuthMobileMenu = () => {
   return (
     <MobileMenu>
       <div className="flex flex-col gap-2 items-start">
-        {menuItems && menuItems.map((item: MenuItem) => (
+        {menuItems && menuItems.map((item) => (
           <LinkButton
             key={item.url}
-            href={item.url || "#"}
+            href={item.url}
             className={`justify-start w-full gap-3 ${
               pathname === item.url
                 ? "bg-nav-active text-nav-text-active"

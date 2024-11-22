@@ -19,19 +19,19 @@ import { TypographyLarge } from "@/components/base/Typography";
 import { LinkButton } from "@/components/base/Buttons";
 import { Button } from "@/components/ui/button";
 
-export type MenuItem = {
+type MenuItem = {
   section?: string;
   title?: string;
   icon?: React.ElementType;
   url?: string;
 };
 
-export const menuItems: MenuItem[] = [
+const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: Home, url: "/app/dashboard" },
   { title: "Room", icon: Phone, url: "/app/room" },
 ];
 
-export function Sidebar() {
+export const SideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { signOut } = useClerk();
   const router = useRouter();

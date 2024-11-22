@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { Footer } from "@/components/layout/Footer";
 import BackgroundIllustration from "@/components/misc/BackgroundIllustration";
-import { Sidebar } from "@/components/layout/SideBar";
+import { SideBar } from "@/components/layout/SideBar";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "@/config/theme-provider";
 import { AuthHeader, UnauthHeader } from "@/components/layout/Header";
@@ -64,7 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </>
           ) : (
             <div className="h-screen w-screen flex flex-col md:flex-row">
-              <Sidebar />
+              <SideBar />
               <div className="flex-1 flex flex-col">
                 <AuthHeader />
                 <main className="flex-1 flex overflow-auto">
