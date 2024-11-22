@@ -4,11 +4,11 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
 import BackgroundIllustration from "@/components/misc/BackgroundIllustration";
 import { Sidebar } from "@/components/layout/SideBar";
 import { useRouter } from "next/router";
-import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ThemeProvider } from "@/config/theme-provider";
+import { AuthHeader, UnauthHeader } from "@/components/layout/Header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -48,21 +48,28 @@ export default function App({ Component, pageProps }: AppProps) {
   const isAuthRoute = router.pathname.startsWith("/app");
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <ClerkProvider afterSignOutUrl="/">
-        <div className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}>
+        <div
+          className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}
+        >
           {!isAuthRoute ? (
             <>
               <BackgroundIllustration multiple />
-              <Header />
-              <Component {...pageProps} />
+              <UnauthHeader />
+              <main className="pt-[80px] pb-[40px]">
+                <Component {...pageProps} />
+              </main>
               <Footer />
             </>
           ) : (
-            <div className="flex h-screen">
-              <Sidebar key={router.asPath} />
-              <div className="flex-1 overflow-auto">
-                <Component {...pageProps} />
+            <div className="h-screen w-screen flex flex-col md:flex-row">
+              <Sidebar />
+              <div className="flex-1 flex flex-col">
+                <AuthHeader />
+                <main className="flex-1 flex pt-[80px] overflow-auto">
+                  <Component {...pageProps} />
+                </main>
               </div>
             </div>
           )}

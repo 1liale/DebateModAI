@@ -4,14 +4,24 @@
 
 @layer base {
   :root {
-    --background: 220 33% 98%;
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
+    
+    /* Navigation colors - light mode */
+    --nav-bg: 0 0% 100%;
+    --nav-fg: 240 5.9% 10%;
+    --nav-hover: 220 13% 95%;
+    --nav-active: 220 13% 90%;
+    --nav-border: 220 13% 91%;
+    --nav-text: 240 3.8% 46.1%;
+    --nav-text-active: 240 5.9% 10%;
+   
+    /* Other colors */
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --header: 0 0% 99%;
-    --header-foreground: 224 71% 4%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 4.8% 95.9%;
@@ -25,29 +35,65 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --brand: 271 57% 58%;
+    
+    /* Gradient colors - light mode */
+    --gradient-start: 220 13% 95%;
+    --gradient-end: 0 0% 100%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
     --background: 224 71% 4%;
     --foreground: 210 20% 98%;
-    --card: 224 71% 4%;
+    
+    /* Navigation colors - dark mode */
+    --nav-bg: 222 13% 14%;
+    --nav-fg: 223 12% 16%;
+    --nav-hover: 216 13% 17%;
+    --nav-active: 216 13% 19%;
+    --nav-border: 215 12% 18%;
+    --nav-text: 220 9% 65%;
+    --nav-text-active: 210 20% 98%;
+    
+    /* Other colors */
+    --card: 222 47% 11%;
     --card-foreground: 210 20% 98%;
-    --popover: 224 71% 4%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 20% 98%;
     --primary: 210 20% 98%;
     --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
+    --secondary: 215 28% 20%;
     --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
+    --muted: 215 28% 20%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
+    --accent: 215 28% 20%;
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
+    --border: 215 28% 20%;
+    --input: 215 28% 20%;
     --ring: 216 12.2% 83.9%;
+    --brand: 271 57% 58%;
+    
+    /* Gradient colors - dark mode */
+    --gradient-start: 222 15% 10%;
+    --gradient-end: 222 13% 16%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 

@@ -8,6 +8,7 @@ import {
   TypographyLarge,
   TypographyLead,
 } from "@/components/base/Typography";
+import { YoutubeEmbed } from "@/components/misc/YoutubeEmbed";
 
 export const HeroSection = () => (
   <section className="flex items-center justify-center text-center relative h-[calc(100vh-120px)]">
@@ -96,6 +97,20 @@ export const BenefitsSection = () => (
   </section>
 );
 
+const testimonials = [
+  {
+    quote: "This AI debate platform has transformed how I practice. It's incredibly effective!",
+    name: "Sarah Johnson",
+    title: "National Debate Champion",
+    avatar: "/avatars/sarah.jpg"
+  },
+  {
+    quote: "The real-time feedback has helped me improve faster than traditional practice methods.",
+    name: "Michael Chen",
+    title: "Debate Team Coach",
+    avatar: "/avatars/michael.jpg"
+  }
+];
 export const SocialProofSection = () => (
   <section className="py-24">
     <div className="container mx-auto px-4">
@@ -143,39 +158,13 @@ export const SocialProofSection = () => (
   </section>
 );
 
-const YoutubeEmbed = ({ videoId }: { videoId: string }) => (
-  <div className="relative pb-[56.25%] h-0">
-    <iframe
-      className="absolute top-0 left-0 w-full h-full rounded-xl"
-      src={`https://www.youtube.com/embed/${videoId}`}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-  </div>
-);
-
-const testimonials = [
-  {
-    quote: "This AI debate platform has transformed how I practice. It's incredibly effective!",
-    name: "Sarah Johnson",
-    title: "National Debate Champion",
-    avatar: "/avatars/sarah.jpg"
-  },
-  {
-    quote: "The real-time feedback has helped me improve faster than traditional practice methods.",
-    name: "Michael Chen",
-    title: "Debate Team Coach",
-    avatar: "/avatars/michael.jpg"
-  }
-];
-
 export default function Page() {
   return (
-    <main className="pt-[80px] pb-[40px]">
+    <>
       <HeroSection />
       <HowItWorksSection />
       <BenefitsSection />
       <SocialProofSection />
-    </main>
+    </>
   );
 }

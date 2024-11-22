@@ -1,9 +1,6 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-} from "@/components/ui/sheet";
+"use client";
+
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import {
@@ -20,122 +17,84 @@ import {
 } from "@/components/base/Buttons";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { customDarkTheme } from "@/styles/customTheme";
+import { usePathname } from "next/navigation";
 
-interface MobileMenuProps {
-  pathname: string;
-}
-
-export const MobileMenu = ({ pathname }: MobileMenuProps) => {
+export const MobileMenu = ({ children }: { children: React.ReactNode }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden relative w-10 h-10 p-0 m-0">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden relative w-10 h-10 p-0 m-0"
+        >
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
       <SheetContent
         side="top"
-        className="w-[250px] fixed right-4 left-auto mt-16 rounded-lg border border-gray-800 bg-gray-950"
+        className="max-w-[250px] fixed right-4 left-auto mt-16 rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950"
         onPointerDownOutside={(e) => e.preventDefault()}
       >
-        <div className="flex justify-between items-center mb-4">
-          <SheetTitle className="sr-only">
-            Navigation Menu
-          </SheetTitle>
-          <SheetTrigger asChild></SheetTrigger>
-        </div>
-        <div className="flex flex-col space-y-4 items-start p-2">
-          <LinkButton href="#about" className="justify-start w-full">
-            About Us
-          </LinkButton>
-          <LinkButton href="#features" className="justify-start w-full">
-            Features
-          </LinkButton>
-          <LinkButton href="#pricing" className="justify-start w-full">
-            Pricing
-          </LinkButton>
-          <LinkButton href="#pricing" className="justify-start w-full">
-            Contact Us
-          </LinkButton>
-          <SignedIn>
-            {!pathname.startsWith("/app") && (
-              <LinkButton
-                href="/app/dashboard"
-                variant="default"
-                className="w-full justify-start"
-              >
-                Dashboard
-              </LinkButton>
-            )}
-            <div className="flex justify-center ml-1 relative">
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "h-10 w-10",
-                    userButtonPopoverCard: {
-                      pointerEvents: "initial",
-                      zIndex: 100,
-                    },
-                  },
-                }}
-              />
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <PrimaryButton className="w-full justify-center">
-              <SignInButton fallbackRedirectUrl="/" />
-            </PrimaryButton>
-            <SecondaryButton className="w-full justify-center">
-              <SignUpButton fallbackRedirectUrl="/">Register</SignUpButton>
-            </SecondaryButton>
-          </SignedOut>
-        </div>
+        {children}
       </SheetContent>
     </Sheet>
   );
 };
 
-interface MenuProps {
-  pathname: string;
-}
+export const UnauthMobileMenu = () => {
+  const pathname = usePathname();
+  const { theme } = useTheme();
 
-export const DesktopMenu = ({ pathname }: MenuProps) => {
   return (
-    <div className="hidden lg:flex items-center space-x-3">
-      <LinkButton href="#Solutions">
-        Solutions
-      </LinkButton>
-      <LinkButton href="#pricing">
-        Pricing
-      </LinkButton>
-      <LinkButton href="#pricing">
-        Contact Us
-      </LinkButton>
-      <SignedIn>
-        {!pathname.startsWith("/app") && (
-          <Link href="/app/dashboard">  
-            <PrimaryButton className="mr-4">
-              Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
-            </PrimaryButton>
-          </Link>
-        )}
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "h-10 w-10",
-              userButtonPopoverCard: { pointerEvents: "initial" },
-            },
-          }}
-        />
-      </SignedIn>
-      <SignedOut>
-        <PrimaryButton>
-          <SignInButton fallbackRedirectUrl="/" />
-        </PrimaryButton>
-        <SecondaryButton>
-          <SignUpButton fallbackRedirectUrl="/">Register</SignUpButton>
-        </SecondaryButton>
-      </SignedOut>
-    </div>
+    <MobileMenu>
+      <div className="flex flex-col gap-2 items-start">
+        <LinkButton href="#about" className="justify-start w-full">
+          About Us
+        </LinkButton>
+        <LinkButton href="#features" className="justify-start w-full">
+          Features
+        </LinkButton>
+        <LinkButton href="#pricing" className="justify-start w-full">
+          Pricing
+        </LinkButton>
+        <LinkButton href="#pricing" className="justify-start w-full">
+          Contact Us
+        </LinkButton>
+        <SignedIn>
+          {!pathname.startsWith("/app") && (
+            <Link href="/app/dashboard" className="w-full">
+              <PrimaryButton className="justify-between">
+                Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
+              </PrimaryButton>
+            </Link>
+          )}
+          <div className="flex justify-center ml-1 relative">
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-10 w-10",
+                  userButtonPopoverCard: {
+                    pointerEvents: "initial",
+                    zIndex: 100,
+                  },
+                },
+                baseTheme: theme === "dark" ? customDarkTheme : undefined,
+              }}
+            />
+          </div>
+        </SignedIn>
+        <SignedOut>
+          <PrimaryButton className="w-full justify-center">
+            <SignInButton fallbackRedirectUrl="/" />
+          </PrimaryButton>
+          <SecondaryButton className="w-full justify-center">
+            <SignUpButton fallbackRedirectUrl="/">Register</SignUpButton>
+          </SecondaryButton>
+        </SignedOut>
+      </div>
+    </MobileMenu>
   );
 };

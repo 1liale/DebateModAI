@@ -3,6 +3,7 @@ import Illustration from "@/public/images/page-illustration.svg";
 import BlurredShapeGray from "@/public/images/blurred-shape-gray.svg";
 import BlurredShape from "@/public/images/blurred-shape.svg";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface BackgroundIllustrationProps {
   multiple?: boolean;
@@ -10,14 +11,19 @@ interface BackgroundIllustrationProps {
 
 export default function BackgroundIllustration({ multiple = false }: BackgroundIllustrationProps) {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Don't render opacity classes until mounted to avoid hydration mismatch
+  const opacityClass = mounted ? (theme === 'dark' ? 'opacity-100' : 'opacity-40') : 'opacity-40';
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       <div
-        className={`pointer-events-none absolute left-1/2 top-0 -translate-x-1/4 ${
-          isDark ? 'opacity-100' : 'opacity-40'
-        }`}
+        className={`pointer-events-none absolute left-1/2 top-0 -translate-x-1/4 ${opacityClass}`}
         aria-hidden="true"
       >
         <Image
@@ -36,9 +42,7 @@ export default function BackgroundIllustration({ multiple = false }: BackgroundI
             aria-hidden="true"
           >
             <div className={`w-[760px] h-[668px] rounded-full ${
-              isDark 
-                ? 'bg-gray-800/30' 
-                : 'bg-blue-50/30 dark:bg-blue-900/20'
+              theme === 'light' ? 'bg-blue-50/30 dark:bg-blue-900/20' : 'bg-gray-800/30'
             }`} />
           </div>
           <div
@@ -46,9 +50,7 @@ export default function BackgroundIllustration({ multiple = false }: BackgroundI
             aria-hidden="true"
           >
             <div className={`w-[760px] h-[668px] rounded-full ${
-              isDark 
-                ? 'bg-indigo-900/20' 
-                : 'bg-indigo-50/30 dark:bg-indigo-900/20'
+              theme === 'light' ? 'bg-indigo-50/30 dark:bg-indigo-900/20' : 'bg-indigo-900/20'
             }`} />
           </div>
         </>
