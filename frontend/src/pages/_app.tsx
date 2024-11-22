@@ -57,7 +57,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <>
               <BackgroundIllustration multiple />
               <UnauthHeader />
-              <main className="pt-[80px] pb-[40px]">
+              <main className="flex-1 flex flex-col">
                 <Component {...pageProps} />
               </main>
               <Footer />
@@ -67,7 +67,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <Sidebar />
               <div className="flex-1 flex flex-col">
                 <AuthHeader />
-                <main className="flex-1 flex pt-[80px] overflow-auto">
+                <main className="flex-1 flex overflow-auto">
                   <Component {...pageProps} />
                 </main>
               </div>

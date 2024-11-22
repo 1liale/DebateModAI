@@ -54,7 +54,7 @@ export default function Page() {
       token={token}
       serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
       data-lk-theme="default"
-      style={{ height: '100dvh' }}
+      style={{ height: '100%', width: '100%' }}
     >
       <MyVideoConference />
       <RoomAudioRenderer />
@@ -123,8 +123,6 @@ function PrejoinScreen({ onJoin }: { onJoin: (room: string, name: string) => voi
 }
 
 function MyVideoConference() {
-  // `useTracks` returns all camera and screen share tracks. If a user
-  // joins without a published camera track, a placeholder track is returned.
   const tracks = useTracks(
     [
       { source: Track.Source.Camera, withPlaceholder: true },
@@ -133,9 +131,7 @@ function MyVideoConference() {
     { onlySubscribed: false },
   );
   return (
-    <GridLayout tracks={tracks} style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}>
-      {/* The GridLayout accepts zero or one child. The child is used
-      as a template to render all passed in tracks. */}
+    <GridLayout tracks={tracks} style={{ height: 'calc(100% - var(--lk-control-bar-height))' }}>
       <ParticipantTile />
     </GridLayout>
   );

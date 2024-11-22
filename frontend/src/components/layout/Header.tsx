@@ -29,7 +29,8 @@ interface HeaderProps {
 
 export const Header = ({ children, className }: HeaderProps) => {
   return (
-    <header 
+    <header
+      // Has to be sticky for some reasons
       className={cn(
         "sticky top-0 z-50 h-16 border-b backdrop-blur-sm bg-background/90 border-border/50",
         className
@@ -114,7 +115,7 @@ export const UnauthHeader = () => {
 
 export const AuthHeader = () => {
   return (
-    <Header className="border-2 border-red-500 bg-gradient-to-l from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
+    <Header className="min-h-[80px] bg-gradient-to-l from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
       <div className="w-full flex items-center justify-between">
         <TypographyLarge>Welcome to DebateMod</TypographyLarge>
       </div>
