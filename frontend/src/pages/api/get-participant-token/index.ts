@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { AccessToken } from "livekit-server-sdk";
+import { AccessToken, Room, RoomServiceClient } from "livekit-server-sdk";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,6 +10,8 @@ export default async function handler(
   }
 
   const { room, username } = req.query;
+
+  console.log(room, username);
 
   // Validate request parameters
   if (!room) {
@@ -31,16 +33,32 @@ export default async function handler(
   }
 
   try {
+    const livekitHost = wsUrl.replace('wss://', 'https://');
+    const roomServiceClient = new RoomServiceClient(livekitHost, apiKey, apiSecret);
+    const participants = await roomServiceClient.listParticipants(room as string);
+    
+    // Check if username already exists in the room
+    if (participants.some(participant => participant.name === username)) {
+      return res.status(500).json({ error: "Username already exists in the room" });
+    }
+    console.log('Current participants in room:', participants);
+  } catch (error) {
+    console.error('Error listing participants:', error);
+  }
+
+  try {
     const accessToken = new AccessToken(apiKey, apiSecret, {
-      identity: Array.isArray(username) ? username[0] : username,
+      identity: username as string,
+      name: username as string,
     });
 
     accessToken.addGrant({
-      room: Array.isArray(room) ? room[0] : room,
+      room: room as string,
       roomJoin: true,
       canPublish: true,
       canSubscribe: true,
     });
+
     return res.status(200).json({ token: await accessToken.toJwt() });
   } catch (error) {
     return res.status(500).json({ error: `Failed to generate token ${error}` });

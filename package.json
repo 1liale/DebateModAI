@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@livekit/components-react": "^2.6.10",
+    "@livekit/components-styles": "^1.1.4"
+  }
+}
