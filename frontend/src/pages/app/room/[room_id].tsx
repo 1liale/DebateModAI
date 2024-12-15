@@ -9,7 +9,7 @@ import {
 import '@livekit/components-styles';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Track, DisconnectReason } from 'livekit-client';
+import { Track, RoomEvent } from 'livekit-client';
 import { Spinner } from "@/components/ui/spinner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { LinkButton } from "@/components/base/Buttons";
@@ -119,7 +119,7 @@ function VideoConference() {
     ],
     { 
       onlySubscribed: false,
-      updateOnlyOn: ['subscribed', 'unsubscribed'],
+      updateOnlyOn: [RoomEvent.TrackSubscribed, RoomEvent.TrackUnsubscribed],
     },
   );
 

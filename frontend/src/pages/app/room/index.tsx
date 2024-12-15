@@ -36,9 +36,9 @@ interface ControlOverlaysProps {
   audioEnabled: boolean;
   setAudioEnabled: (enabled: boolean) => void;
   devices: DeviceState;
-  selectedVideoInput: string;
+  selectedVideoInput?: string;
   setSelectedVideoInput: (deviceId: string) => void;
-  selectedAudioInput: string;
+  selectedAudioInput?: string;
   setSelectedAudioInput: (deviceId: string) => void;
 }
 
