@@ -1,10 +1,23 @@
-import { Calendar as ReactCalendar } from 'react-calendar';
+import { Calendar as ReactCalendar } from "react-calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { TypographyH2, TypographyLarge } from "@/components/base/Typography";
-import { Flame, Trophy, Clock, TrendingUp, Users, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Flame,
+  Trophy,
+  Clock,
+  TrendingUp,
+  Users,
+  BookOpen,
+} from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 // Course Progress Cards
 const CourseCards = () => (
@@ -26,7 +39,10 @@ const CourseCards = () => (
           </div>
         </div>
         <div className="w-full bg-blue-100 dark:bg-blue-800/30 rounded-full h-2.5 mb-2">
-          <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: "75%" }} />
+          <div
+            className="bg-blue-500 h-2.5 rounded-full"
+            style={{ width: "75%" }}
+          />
         </div>
         <p className="text-sm text-blue-600 dark:text-blue-400">75% Complete</p>
       </CardContent>
@@ -49,9 +65,14 @@ const CourseCards = () => (
           </div>
         </div>
         <div className="w-full bg-orange-100 dark:bg-orange-800/30 rounded-full h-2.5 mb-2">
-          <div className="bg-orange-500 h-2.5 rounded-full" style={{ width: "45%" }} />
+          <div
+            className="bg-orange-500 h-2.5 rounded-full"
+            style={{ width: "45%" }}
+          />
         </div>
-        <p className="text-sm text-orange-600 dark:text-orange-400">45% Complete</p>
+        <p className="text-sm text-orange-600 dark:text-orange-400">
+          45% Complete
+        </p>
       </CardContent>
     </Card>
 
@@ -72,9 +93,14 @@ const CourseCards = () => (
           </div>
         </div>
         <div className="w-full bg-green-100 dark:bg-green-800/30 rounded-full h-2.5 mb-2">
-          <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "20%" }} />
+          <div
+            className="bg-green-500 h-2.5 rounded-full"
+            style={{ width: "20%" }}
+          />
         </div>
-        <p className="text-sm text-green-600 dark:text-green-400">20% Complete</p>
+        <p className="text-sm text-green-600 dark:text-green-400">
+          20% Complete
+        </p>
       </CardContent>
     </Card>
   </div>
@@ -129,20 +155,240 @@ const StatsOverview = () => (
   </div>
 );
 
-// Hours Spent Chart
-const HoursSpentChart = () => (
-  <Card className="mb-8">
-    <CardHeader>
-      <CardTitle>Hours Spent</CardTitle>
-    </CardHeader>
-    <CardContent>
-      {/* Implement chart here */}
-      <div className="h-[300px]">
-        {/* Chart placeholder */}
-      </div>
-    </CardContent>
-  </Card>
-);
+// Debate Topics Carousel
+const DebateTopicsCarousel = () => {
+  const topics = {
+    trending: [
+      {
+        title: "AI Regulation",
+        engagement: "2.3k debates",
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+      },
+      {
+        title: "TEST",
+        engagement: "2.1k debates",
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+      },
+      {
+        title: "Universal Basic Income",
+        engagement: "1.8k debates",
+        category: "Economics",
+        image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e",
+      },
+      {
+        title: "Space Colonization",
+        engagement: "1.5k debates",
+        category: "Science",
+        image: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2",
+      },
+    ],
+    favorites: [
+      {
+        title: "Climate Change Solutions",
+        engagement: "Saved by 1.2k",
+        category: "Environment",
+        image: "https://images.unsplash.com/photo-1569163139599-0f4517e36f51",
+      },
+      {
+        title: "Digital Privacy Rights",
+        engagement: "Saved by 980",
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f",
+      },
+      {
+        title: "Education Reform",
+        engagement: "Saved by 850",
+        category: "Education",
+        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
+      },
+    ],
+    controversial: [
+      {
+        title: "Social Media Impact",
+        engagement: "50/50 split",
+        category: "Society",
+        image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0",
+      },
+      {
+        title: "Genetic Engineering",
+        engagement: "51/49 split",
+        category: "Ethics",
+        image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31",
+      },
+      {
+        title: "Cryptocurrency Future",
+        engagement: "48/52 split",
+        category: "Finance",
+        image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d",
+      },
+    ],
+  };
+
+  return (
+    <div className="space-y-6 mb-8">
+      {/* Trending Topics */}
+      <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <TrendingUp className="h-5 w-5" />
+            <h3 className="text-xl font-semibold">Trending</h3>
+          </div>
+
+          <div className="relative px-4">
+            <Carousel
+              opts={{
+                align: "start"
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {topics.trending.map((topic, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="pl-4 basis-full md:basis-1/2 lg:basis-1/3"
+                  >
+                    <Card className="overflow-hidden hover:shadow-lg transition-all">
+                      <div className="relative h-40 w-full">
+                        <img
+                          src={topic.image}
+                          alt={topic.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardContent className="p-4">
+                        <h4 className="font-semibold mb-2">{topic.title}</h4>
+                        <Badge variant="secondary" className="mb-2">
+                          {topic.category}
+                        </Badge>
+                        <p className="text-sm text-muted-foreground">
+                          {topic.engagement}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {topics.trending.length > 3 && (
+                <>
+                  <CarouselPrevious className="hidden md:flex ml-3 w-8 h-8" />
+                  <CarouselNext className="hidden md:flex mr-3 w-8 h-8" />
+                </>
+              )}
+            </Carousel>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Favorite Topics */}
+      <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <BookOpen className="h-5 w-5" />
+            <h3 className="text-xl font-semibold">Favorites</h3>
+          </div>
+
+          <div className="relative px-4">
+            <Carousel
+              opts={{
+                align: "start"
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {topics.favorites.map((topic, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="pl-4 basis-full md:basis-1/2 lg:basis-1/3"
+                  >
+                    <Card className="overflow-hidden hover:shadow-lg transition-all">
+                      <div className="relative h-40 w-full">
+                        <img
+                          src={topic.image}
+                          alt={topic.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardContent className="p-4">
+                        <h4 className="font-semibold mb-2">{topic.title}</h4>
+                        <Badge variant="secondary" className="mb-2">
+                          {topic.category}
+                        </Badge>
+                        <p className="text-sm text-muted-foreground">
+                          {topic.engagement}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {topics.favorites.length > 3 && (
+                <>
+                  <CarouselPrevious className="hidden md:flex ml-3 w-8 h-8" />
+                  <CarouselNext className="hidden md:flex mr-3 w-8 h-8" />
+                </>
+              )}
+            </Carousel>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Controversial Topics */}
+      <Card className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Flame className="h-5 w-5" />
+            <h3 className="text-xl font-semibold">Controversial</h3>
+          </div>
+
+          <div className="relative px-4">
+            <Carousel
+              opts={{
+                align: "start"
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {topics.controversial.map((topic, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="pl-4 basis-full md:basis-1/2 lg:basis-1/3"
+                  >
+                    <Card className="overflow-hidden hover:shadow-lg transition-all">
+                      <div className="relative h-40 w-full">
+                        <img
+                          src={topic.image}
+                          alt={topic.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardContent className="p-4">
+                        <h4 className="font-semibold mb-2">{topic.title}</h4>
+                        <Badge variant="secondary" className="mb-2">
+                          {topic.category}
+                        </Badge>
+                        <p className="text-sm text-muted-foreground">
+                          {topic.engagement}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {topics.controversial.length > 3 && (
+                <>
+                  <CarouselPrevious className="hidden md:flex ml-3 w-8 h-8" />
+                  <CarouselNext className="hidden md:flex mr-3 w-8 h-8" />
+                </>
+              )}
+            </Carousel>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 // Updated Calendar Component
 const Calendar = () => {
@@ -235,7 +481,7 @@ const Calendar = () => {
             color: white;
           }
         `}</style>
-        <ReactCalendar 
+        <ReactCalendar
           className="border-none"
           view="month"
           onClickDay={(value) => {
@@ -294,17 +540,19 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 overflow-auto p-6">
       <div className="space-y-2 mb-8">
-        <TypographyH2>Welcome back, {user?.firstName || "Debater"}!</TypographyH2>
+        <TypographyH2>
+          Welcome back, {user?.firstName || "Debater"}!
+        </TypographyH2>
         <TypographyLarge className="text-muted-foreground">
-          Track your journey to mastering debate
+          Track your journey to debate mastery
         </TypographyLarge>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <CourseCards />
           <StatsOverview />
-          <HoursSpentChart />
+          <DebateTopicsCarousel />
         </div>
         <div className="space-y-6">
           <Calendar />
