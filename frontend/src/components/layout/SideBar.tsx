@@ -1,15 +1,17 @@
+import dynamic from 'next/dynamic';
 import {
   Home,
-  User,
-  FileText,
-  Calendar,
-  Settings,
   LogOut,
   HelpCircle,
   Phone,
+  MessageSquare,
+  Users,
+  UserCog,
+  MessageCircle,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { ThemeButton, ThemeSwitch } from "@/components/misc/ThemeWidget";
@@ -29,12 +31,38 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: Home, url: "/app/dashboard" },
   { title: "Room", icon: Phone, url: "/app/room" },
+  { title: "Debate Topics", icon: MessageSquare, url: "/app/topics" },
+  { section: "Participants" },
+  { title: "Learners", icon: Users, url: "/app/learners" },
+  { title: "Instructors", icon: UserCog, url: "/app/instructors" },
+  { section: "Progress" },
+  {title: "Learning", icon: BookOpen, url: "/app/learning"},
+  { title: "Feedback", icon: MessageCircle, url: "/app/feedback" },
 ];
 
-export const SideBar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+const SideBarComponent = () => {
   const { signOut } = useClerk();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+    // Get the stored value after mounting
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('sidebarOpen');
+      setIsOpen(stored !== null ? stored === 'true' : true);
+    }
+  }, []);
+
+  if (!mounted) {
+    return null; // Return null on server-side and initial render
+  }
+
+  const handleSetIsOpen = (value: boolean) => {
+    setIsOpen(value);
+    localStorage.setItem('sidebarOpen', String(value));
+  };
 
   const handleSidebarClick = (e: React.MouseEvent) => {
     if (
@@ -43,7 +71,7 @@ export const SideBar = () => {
       !e.target.closest("a") &&
       !e.target.closest('[role="button"]')
     ) {
-      setIsOpen(!isOpen);
+      handleSetIsOpen(!isOpen);
     }
   };
 
@@ -76,34 +104,46 @@ export const SideBar = () => {
 
         <div className="flex-1 p-3 flex flex-col justify-start gap-1">
           {menuItems.map((item, index) => (
-            <LinkButton
-              key={index}
-              href={item.url || "#"}
-              variant="ghost"
-              className={`flex w-full items-center justify-start gap-3 px-3 py-2.5 rounded-lg 
-                ${
-                router.pathname === item.url
-                  ? "bg-nav-active text-nav-text-active"
-                  : "text-nav-text hover:bg-nav-hover hover:text-nav-text-active"
-              }`}
-            >
-              {item.icon && (
-                <item.icon
-                  className={` ${
-                    router.pathname === item.url
-                      ? "text-sidebar-text-active"
-                      : "text-sidebar-text"
+            <div key={index}>
+              {isOpen && item.section && (
+                <div className="text-xs font-semibold text-sidebar-text-muted uppercase tracking-wider px-3 py-2 mt-4">
+                  {item.section}
+                </div>
+              )}
+              {item.title && (
+                <LinkButton
+                  href={item.url!}
+                  variant="ghost"
+                  onClick={(e) => {
+                    if (router.pathname.includes(item.url!) && item.url === '/app/room') {
+                      e.preventDefault();
+                    }
+                  }}
+                  className={`flex w-full items-center justify-start gap-3 px-3 py-2.5 rounded-lg 
+                    ${
+                    router.pathname.includes(item.url!)
+                      ? "bg-nav-active text-nav-text-active"
+                      : "text-nav-text hover:bg-nav-hover hover:text-nav-text-active"
                   }`}
-                />
+                >
+                  {item.icon && (
+                    <item.icon
+                      className={`${
+                        router.pathname.includes(item.url!)
+                          ? "text-sidebar-text-active"
+                          : "text-sidebar-text"
+                      }`}
+                    />
+                  )}
+                  {isOpen && (
+                    <span className="text-sm font-medium truncate">
+                      {item.title}
+                    </span>
+                  )}
+                </LinkButton>
               )}
-              {isOpen && (
-                <span className="text-sm font-medium truncate">
-                  {item.title}
-                </span>
-              )}
-            </LinkButton>
+            </div>
           ))}
- 
         </div>
 
         {/* Bottom section */}
@@ -143,4 +183,11 @@ export const SideBar = () => {
       </div>
     </aside>
   );
-}
+};
+
+// Export a client-side only version of the component
+export const SideBar = dynamic(() => Promise.resolve(SideBarComponent), {
+  ssr: false,
+});
+
+export default SideBar;

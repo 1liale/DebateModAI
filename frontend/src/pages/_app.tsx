@@ -9,6 +9,8 @@ import { SideBar } from "@/components/layout/SideBar";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "@/config/theme-provider";
 import { AuthHeader, UnauthHeader } from "@/components/layout/Header";
+import { RoomProvider } from "@/contexts/RoomContext";
+import 'react-calendar/dist/Calendar.css';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,15 +65,17 @@ export default function App({ Component, pageProps }: AppProps) {
               <Footer />
             </>
           ) : (
-            <div className="h-screen w-screen flex flex-col md:flex-row">
-              <SideBar />
-              <div className="flex-1 flex flex-col">
-                <AuthHeader />
-                <main className="flex-1 flex overflow-auto">
-                  <Component {...pageProps} />
-                </main>
+            <RoomProvider>
+              <div className="h-screen w-screen flex flex-col md:flex-row">
+                <SideBar />
+                <div className="flex-1 flex flex-col">
+                  <AuthHeader />
+                  <main className="flex-1 flex overflow-auto">
+                    <Component {...pageProps} />
+                  </main>
+                </div>
               </div>
-            </div>
+            </RoomProvider>
           )}
         </div>
       </ClerkProvider>

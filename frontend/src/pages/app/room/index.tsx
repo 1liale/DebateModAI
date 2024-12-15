@@ -18,66 +18,89 @@ import {
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Video, VideoOff, Mic, MicOff } from "lucide-react";
+import { useRoom } from '@/contexts/RoomContext';
 
-export default function Page() {
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !router.isReady) {
-    return (
-      <main className="flex-1 flex">
-        <div className="flex w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8">
-          <div className="flex-[2]" />
-          <div className="flex-1" />
-        </div>
-      </main>
-    );
-  }
-
-  return (
-    <main className="flex-1 flex">
-      <PrejoinScreen
-        onJoin={(room: string, name: string) => {
-          router.push(`/app/room/${room}?username=${encodeURIComponent(name)}`);
-        }}
-      />
-    </main>
-  );
+// Interfaces
+interface DeviceState {
+  audioInputs: MediaDeviceInfo[];
+  videoInputs: MediaDeviceInfo[];
 }
 
-const PrejoinScreen = ({
-  onJoin,
-}: {
+interface PrejoinScreenProps {
   onJoin: (room: string, name: string) => void;
-}) => {
-  const [mounted, setMounted] = useState(false);
-  const [roomId, setRoomId] = useState("");
-  const [username, setUsername] = useState("");
-  const [videoEnabled, setVideoEnabled] = useState(true);
-  const [audioEnabled, setAudioEnabled] = useState(true);
+}
+
+interface ControlOverlaysProps {
+  videoEnabled: boolean;
+  setVideoEnabled: (enabled: boolean) => void;
+  audioEnabled: boolean;
+  setAudioEnabled: (enabled: boolean) => void;
+  devices: DeviceState;
+  selectedVideoInput: string;
+  setSelectedVideoInput: (deviceId: string) => void;
+  selectedAudioInput: string;
+  setSelectedAudioInput: (deviceId: string) => void;
+}
+
+interface RoomDetailsFormProps {
+  roomId: string;
+  username: string;
+  setRoomId: (value: string) => void;
+  setUsername: (value: string) => void;
+  onJoin: (roomId: string, username: string) => void;
+}
+
+const PrejoinScreen: React.FC<PrejoinScreenProps> = ({ onJoin }) => {
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [roomId, setRoomId] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [devices, setDevices] = useState<{
-    audioInputs: MediaDeviceInfo[];
-    videoInputs: MediaDeviceInfo[];
-  }>({ audioInputs: [], videoInputs: [] });
-  const [selectedAudioInput, setSelectedAudioInput] = useState();
-  const [selectedVideoInput, setSelectedVideoInput] = useState();
-  const [audioLevel, setAudioLevel] = useState(0);
+  const [devices, setDevices] = useState<DeviceState>({ 
+    audioInputs: [], 
+    videoInputs: [] 
+  });
+  const [selectedAudioInput, setSelectedAudioInput] = useState<string>();
+  const [selectedVideoInput, setSelectedVideoInput] = useState<string>();
+  const [audioLevel, setAudioLevel] = useState<number>(0);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number>();
 
-  // Set mounted state
+  const cleanupMediaStreams = () => {
+    // Stop video stream
+    if (videoStream) {
+      videoStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      setVideoStream(null);
+    }
+
+    // Stop video element's stream
+    if (videoRef.current && videoRef.current.srcObject) {
+      (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+
+    // Close audio context
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+
+    // Cancel animation frame
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = undefined;
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Load devices and previously selected devices
   useEffect(() => {
     if (!mounted) return;
 
@@ -85,13 +108,12 @@ const PrejoinScreen = ({
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         setDevices({
-          audioInputs: devices.filter(d => d.kind === 'audioinput'),
-          videoInputs: devices.filter(d => d.kind === 'videoinput'),
+          audioInputs: devices.filter((d) => d.kind === "audioinput"),
+          videoInputs: devices.filter((d) => d.kind === "videoinput"),
         });
 
-        // Load saved preferences
-        const savedAudioInput = localStorage.getItem('preferredAudioInput');
-        const savedVideoInput = localStorage.getItem('preferredVideoInput');
+        const savedAudioInput = localStorage.getItem("preferredAudioInput");
+        const savedVideoInput = localStorage.getItem("preferredVideoInput");
         if (savedAudioInput) setSelectedAudioInput(savedAudioInput);
         if (savedVideoInput) setSelectedVideoInput(savedVideoInput);
       } catch (err) {
@@ -101,15 +123,13 @@ const PrejoinScreen = ({
     loadDevices();
   }, [mounted]);
 
-  // Request camera/mic permissions on mount
   useEffect(() => {
     if (!mounted) return;
 
     const getMedia = async () => {
       try {
-        if (videoStream) {
-          videoStream.getTracks().forEach((track) => track.stop());
-        }
+        // Clean up existing streams first
+        cleanupMediaStreams();
 
         const constraints = {
           video: selectedVideoInput ? { deviceId: selectedVideoInput } : true,
@@ -119,9 +139,10 @@ const PrejoinScreen = ({
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         setVideoStream(stream);
 
-        // Save preferences
-        if (selectedAudioInput) localStorage.setItem('preferredAudioInput', selectedAudioInput);
-        if (selectedVideoInput) localStorage.setItem('preferredVideoInput', selectedVideoInput);
+        if (selectedAudioInput)
+          localStorage.setItem("preferredAudioInput", selectedAudioInput);
+        if (selectedVideoInput)
+          localStorage.setItem("preferredVideoInput", selectedVideoInput);
       } catch (err) {
         console.error("Error accessing media devices:", err);
         setVideoEnabled(false);
@@ -130,22 +151,17 @@ const PrejoinScreen = ({
     };
     getMedia();
 
-    // Cleanup
     return () => {
-      if (videoStream) {
-        videoStream.getTracks().forEach((track) => track.stop());
-      }
+      cleanupMediaStreams();
     };
   }, [mounted, selectedAudioInput, selectedVideoInput]);
 
-  // Handle video stream changes
   useEffect(() => {
     if (videoRef.current && videoStream && videoEnabled) {
       videoRef.current.srcObject = videoStream;
     }
   }, [videoStream, videoEnabled]);
 
-  // Add this effect after the video stream effect
   useEffect(() => {
     if (!videoStream || !audioEnabled) {
       if (animationFrameRef.current) {
@@ -155,12 +171,10 @@ const PrejoinScreen = ({
       return;
     }
 
-    // Initialize audio context and analyzer
     audioContextRef.current = new AudioContext();
     analyserRef.current = audioContextRef.current.createAnalyser();
     analyserRef.current.fftSize = 256;
 
-    // Get audio track and connect to analyzer
     const audioTrack = videoStream.getAudioTracks()[0];
     if (audioTrack) {
       const source = audioContextRef.current.createMediaStreamSource(videoStream);
@@ -168,21 +182,19 @@ const PrejoinScreen = ({
 
       const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
 
-      // Animation function to update audio levels
       const updateAudioLevel = () => {
         if (!analyserRef.current) return;
-        
+
         analyserRef.current.getByteFrequencyData(dataArray);
         const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
         setAudioLevel(average);
-        
+
         animationFrameRef.current = requestAnimationFrame(updateAudioLevel);
       };
 
       updateAudioLevel();
     }
 
-    // Cleanup
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -193,7 +205,6 @@ const PrejoinScreen = ({
     };
   }, [videoStream, audioEnabled]);
 
-  // Don't render until mounted to avoid hydration mismatch
   if (!mounted) {
     return (
       <div className="flex w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8">
@@ -205,10 +216,9 @@ const PrejoinScreen = ({
 
   return (
     <div className="flex w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8 overflow-hidden">
-      {/* Left column - Video preview */}
       <div className="flex-[2] flex items-center justify-center p-4">
         <div className="flex-1">
-          <div 
+          <div
             className={cn(
               "relative aspect-video bg-gray-950 rounded-lg overflow-hidden",
               "transition-shadow duration-250",
@@ -217,9 +227,11 @@ const PrejoinScreen = ({
               audioLevel > 60 && "shadow-[0_0_50px_rgba(59,130,246,0.9)]"
             )}
             style={{
-              borderColor: audioEnabled ? `rgba(59,130,246,${Math.min(audioLevel / 128, 1)})` : 'transparent',
-              borderWidth: '4px',
-              borderStyle: 'solid'
+              borderColor: audioEnabled
+                ? `rgba(59,130,246,${Math.min(audioLevel / 64, 1)})`
+                : "transparent",
+              borderWidth: "2px",
+              borderStyle: "solid",
             }}
           >
             {videoStream && videoEnabled ? (
@@ -240,127 +252,230 @@ const PrejoinScreen = ({
               </div>
             )}
 
-            {/* Camera/Mic controls overlay */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className={cn(
-                  "bg-background/80 backdrop-blur-sm",
-                  !videoEnabled && "bg-destructive hover:bg-destructive/90"
-                )}
-                onClick={() => setVideoEnabled(!videoEnabled)}
-              >
-                {videoEnabled ? (
-                  <Video className="h-4 w-4" />
-                ) : (
-                  <VideoOff className="h-4 w-4" />
-                )}
-              </Button>
-
-
-              {/* Device selection dropdown buttons */}
-              <Select value={selectedVideoInput} onValueChange={setSelectedVideoInput}>
-                <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
-                  <SelectValue placeholder="Select camera" />
-                </SelectTrigger>
-                <SelectContent>
-                  {devices.videoInputs.map((device) => (
-                    <SelectItem 
-                      key={device.deviceId} 
-                      value={device.deviceId || 'default-camera'}
-                    >
-                      {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Button
-                variant="outline"
-                size="icon"
-                className={cn(
-                  "bg-background/80 backdrop-blur-sm",
-                  !audioEnabled && "bg-destructive hover:bg-destructive/90"
-                )}
-                onClick={() => setAudioEnabled(!audioEnabled)}
-              >
-                {audioEnabled ? (
-                  <Mic className="h-4 w-4" />
-                ) : (
-                  <MicOff className="h-4 w-4" />
-                )}
-              </Button>
-
-              <Select value={selectedAudioInput} onValueChange={setSelectedAudioInput}>
-                <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
-                  <SelectValue placeholder="Select microphone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {devices.audioInputs.map((device) => (
-                    <SelectItem 
-                      key={device.deviceId} 
-                      value={device.deviceId || 'default-mic'}
-                    >
-                      {device.label || `Mic ${device.deviceId.slice(0, 5)}...`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <ControlOverlays
+              videoEnabled={videoEnabled}
+              setVideoEnabled={setVideoEnabled}
+              audioEnabled={audioEnabled}
+              setAudioEnabled={setAudioEnabled}
+              devices={devices}
+              selectedVideoInput={selectedVideoInput}
+              setSelectedVideoInput={setSelectedVideoInput}
+              selectedAudioInput={selectedAudioInput}
+              setSelectedAudioInput={setSelectedAudioInput}
+            />
           </div>
-
-          
         </div>
       </div>
 
-      {/* Right column - Join form */}
-      <div className="flex-1 flex items-center p-8 md:p-12">
-        <div className="w-full space-y-8">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-semibold">Room Details</h2>
-            <p className="text-lg text-muted-foreground">
-              Enter your details to join the room
-            </p>
-          </div>
-          
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <Label htmlFor="roomId" className="text-lg">Room ID</Label>
-              <Input
-                id="roomId"
-                placeholder="Enter room ID"
-                value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
-                className="text-lg py-6"
-              />
-            </div>
+      <RoomDetailsForm
+        roomId={roomId}
+        setRoomId={setRoomId}
+        username={username}
+        setUsername={setUsername}
+        onJoin={onJoin}
+      />
+    </div>
+  );
+};
 
-            <div className="space-y-3">
-              <Label htmlFor="username" className="text-lg">Your Name</Label>
-              <Input
-                id="username"
-                placeholder="Enter your name"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="text-lg py-6"
-              />
-            </div>
+const ControlOverlays: React.FC<ControlOverlaysProps> = ({
+  videoEnabled,
+  setVideoEnabled,
+  audioEnabled,
+  setAudioEnabled,
+  devices,
+  selectedVideoInput,
+  setSelectedVideoInput,
+  selectedAudioInput,
+  setSelectedAudioInput,
+}) => {
+  return (
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <Button
+        variant="outline"
+        size="icon"
+        className={cn(
+          "bg-background/80 backdrop-blur-sm",
+          !videoEnabled && "bg-destructive hover:bg-destructive/90"
+        )}
+        onClick={() => setVideoEnabled(!videoEnabled)}
+      >
+        {videoEnabled ? (
+          <Video className="h-4 w-4" />
+        ) : (
+          <VideoOff className="h-4 w-4" />
+        )}
+      </Button>
 
-            <Button
-              className="w-full text-lg py-6"
-              onClick={() => {
-                if (roomId && username) {
-                  onJoin(roomId, username);
-                }
-              }}
-              disabled={!roomId || !username}
+      <Select value={selectedVideoInput} onValueChange={setSelectedVideoInput}>
+        <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
+          <SelectValue placeholder="Select camera" />
+        </SelectTrigger>
+        <SelectContent>
+          {devices.videoInputs.map((device) => (
+            <SelectItem
+              key={device.deviceId}
+              value={device.deviceId || "default-camera"}
             >
-              Join Room
-            </Button>
+              {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Button
+        variant="outline"
+        size="icon"
+        className={cn(
+          "bg-background/80 backdrop-blur-sm",
+          !audioEnabled && "bg-destructive hover:bg-destructive/90"
+        )}
+        onClick={() => setAudioEnabled(!audioEnabled)}
+      >
+        {audioEnabled ? (
+          <Mic className="h-4 w-4" />
+        ) : (
+          <MicOff className="h-4 w-4" />
+        )}
+      </Button>
+
+      <Select value={selectedAudioInput} onValueChange={setSelectedAudioInput}>
+        <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
+          <SelectValue placeholder="Select microphone" />
+        </SelectTrigger>
+        <SelectContent>
+          {devices.audioInputs.map((device) => (
+            <SelectItem
+              key={device.deviceId}
+              value={device.deviceId || "default-mic"}
+            >
+              {device.label || `Mic ${device.deviceId.slice(0, 5)}...`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
+
+const RoomDetailsForm: React.FC<RoomDetailsFormProps> = ({
+  roomId,
+  username,
+  setRoomId,
+  setUsername,
+  onJoin,
+}) => {
+  return (
+    <div className="flex-1 flex items-center p-8 md:p-12">
+      <div className="w-full space-y-8">
+        <div className="space-y-2">
+          <h2 className="text-3xl font-semibold">Room Details</h2>
+          <p className="text-lg text-muted-foreground">
+            Enter your details to join the room
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <Label htmlFor="roomId" className="text-lg">
+              Room ID
+            </Label>
+            <Input
+              id="roomId"
+              placeholder="Enter room ID"
+              value={roomId}
+              onChange={(e) => setRoomId(e.target.value)}
+              className="text-lg py-6"
+            />
           </div>
+
+          <div className="space-y-3">
+            <Label htmlFor="username" className="text-lg">
+              Your Name
+            </Label>
+            <Input
+              id="username"
+              placeholder="Enter your name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="text-lg py-6"
+            />
+          </div>
+
+          <Button
+            className="w-full text-lg py-6"
+            onClick={() => {
+              if (roomId && username) {
+                onJoin(roomId, username);
+              }
+            }}
+            disabled={!roomId || !username}
+          >
+            Join Room
+          </Button>
         </div>
       </div>
     </div>
   );
-}
+};
+
+const Page = () => {
+  const router = useRouter();
+  const [mounted, setMounted] = useState<boolean>(false);
+  const { activeRoom, activeUsername, setActiveRoom, setActiveUsername } = useRoom();
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Only set up cleanup if not in an active room
+    if (!activeRoom) {
+      const handleRouteChange = () => {
+        const videoElements = document.querySelectorAll('video');
+        videoElements.forEach(videoElement => {
+          if (videoElement.srcObject) {
+            (videoElement.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+            videoElement.srcObject = null;
+          }
+        });
+      };
+
+      router.events.on('routeChangeStart', handleRouteChange);
+      return () => {
+        router.events.off('routeChangeStart', handleRouteChange);
+        handleRouteChange();
+      };
+    }
+  }, [router, activeRoom]);
+
+  useEffect(() => {
+    // If user has an active room, redirect them there
+    if (mounted && activeRoom && activeUsername) {
+      router.push(`/app/room/${activeRoom}?username=${encodeURIComponent(activeUsername)}`);
+    }
+  }, [mounted, activeRoom, activeUsername, router]);
+
+  if (!mounted || !router.isReady) {
+    return (
+      <main className="flex-1 flex">
+        <div className="flex w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8">
+          <div className="flex-[2]" />
+          <div className="flex-1" />
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="flex-1 flex">
+      <PrejoinScreen
+        onJoin={(room: string, name: string) => {
+          setActiveRoom(room);
+          setActiveUsername(name);
+          router.push(`/app/room/${room}?username=${encodeURIComponent(name)}`);
+        }}
+      />
+    </main>
+  );
+};
+
+export default Page;
