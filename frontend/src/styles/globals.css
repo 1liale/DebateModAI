@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    
+    /* Navigation colors - light mode */
+    --nav-bg: 0 0% 100%;
+    --nav-fg: 240 5.9% 10%;
+    --nav-hover: 220 13% 95%;
+    --nav-active: 220 13% 90%;
+    --nav-border: 220 13% 91%;
+    --nav-text: 240 3.8% 46.1%;
+    --nav-text-active: 240 5.9% 10%;
+   
+    /* Other colors */
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --brand: 271 57% 58%;
+    
+    /* Gradient colors - light mode */
+    --gradient-start: 220 13% 88%;
+    --gradient-end: 220 13% 95%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* In :root (light mode) */
+    --chat-bg: 220 13% 96%;  /* Light gray for chat messages */
+    --chat-text: 240 10% 3.9%;  /* Dark text */
+    --app-background: 220 13% 91%;  /* Slightly darker background for sidebar/header */
+    --chat-header: 220 13% 93%;
+    --chat-input: 220 13% 98%;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 20% 98%;
+    
+    /* Navigation colors - dark mode */
+    --nav-bg: 222 13% 14%;
+    --nav-fg: 223 12% 16%;
+    --nav-hover: 216 13% 17%;
+    --nav-active: 216 13% 19%;
+    --nav-border: 215 12% 18%;
+    --nav-text: 220 9% 65%;
+    --nav-text-active: 210 20% 98%;
+    
+    /* Other colors */
+    --card: 222 47% 11%;
+    --card-foreground: 210 20% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+    --secondary: 215 28% 20%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 28% 20%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 28% 20%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 28% 20%;
+    --input: 215 28% 20%;
+    --ring: 216 12.2% 83.9%;
+    --brand: 271 57% 58%;
+    
+    /* Gradient colors - dark mode */
+    --gradient-start: 222 47% 11%;
+    --gradient-end: 222 45% 18%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* In .dark */
+    --chat-bg: 215 28% 17%;
+    --chat-text: 210 20% 98%;
+    --app-background: 222 47% 11%;
+    --chat-header: 222 47% 11%;
+    --chat-input: 222 47% 11%;
+
+    --purple-50: 250 100% 97.5%;
+    --purple-100: 251 91% 95.5%;
+    --purple-500: 258 90% 66%;
+    --purple-600: 262 83% 58%;
+    --purple-900: 262 83% 28%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
