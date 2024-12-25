@@ -12,7 +12,6 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.rewrite(notFoundUrl);
     }
   }
-  
   return NextResponse.next();
 });
 

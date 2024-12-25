@@ -1,7 +1,9 @@
 from livekit.agents import llm, JobContext, JobProcess
 from livekit.agents.pipeline import VoicePipelineAgent
 from livekit.plugins import openai, silero, deepgram, google
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()

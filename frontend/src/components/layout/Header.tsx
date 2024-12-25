@@ -32,9 +32,8 @@ interface HeaderProps {
 export const Header = ({ children, className }: HeaderProps) => {
   return (
     <header
-      // Has to be sticky for some reasons
       className={cn(
-        "sticky top-0 z-50 h-16 border-b backdrop-blur-sm bg-background/90 border-border/50",
+        "sticky top-0 z-50 border-b backdrop-blur-sm bg-background/90 border-b-[1.5px] border-border/90 py-2 md:py-5 px-2 md:px-10",
         className
       )}
     >
@@ -55,32 +54,37 @@ export const UnauthHeader = () => {
         {/* Logo */}
 
         <Link href="/">
-          <div className="flex items-center">
-            <Image src={logo} alt="Logo" width={28} height={28} />
-
-            <TypographyLarge className="text-[1.25rem] pt-1">
-              ebate
-              <span className="text-brand">Mod</span>
-            </TypographyLarge>
-          </div>
-        </Link>
+            <div className="flex items-center">
+              <Image src={logo} alt="Logo" width={30} height={38} />
+          
+              <TypographyLarge className="text-base md:text-3xl pt-0.5 md:pt-1">
+                ebate
+                <span className="text-brand">Mod</span>
+              </TypographyLarge>
+              
+            </div>
+          </Link>
 
         <div className="flex items-center gap-2 md:gap-3">
           {/* Mobile Menu (hidden on desktop) */}
           <UnauthMobileMenu />
 
           {/* Desktop Menu (hidden on mobile) */}
-          <div className="hidden lg:flex items-center space-x-3">
-            <LinkButton href="#Solutions">Solutions</LinkButton>
-            <LinkButton href="#pricing">Pricing</LinkButton>
-            <LinkButton href="#pricing">Contact Us</LinkButton>
+          <div className="hidden lg:flex items-center gap-4">
+            <LinkButton href="/#how-it-works" className="text-md">
+              About
+            </LinkButton>
+            <LinkButton href="/#benefits" className="text-md">
+              Features
+            </LinkButton>
+            <LinkButton href="/faq" className="text-md">
+              FAQ
+            </LinkButton>
             <SignedIn>
               {!pathname.startsWith("/app") && (
-                <Link href="/app/dashboard">
-                  <PrimaryButton className="mr-4">
-                    Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
-                  </PrimaryButton>
-                </Link>
+                <LinkButton href="/app/dashboard" variant="outline" className="text-md">
+                  Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
+                </LinkButton>
               )}
               <UserButton
                 appearance={{

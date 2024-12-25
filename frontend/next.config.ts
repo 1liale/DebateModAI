@@ -5,7 +5,12 @@ const nextConfig: NextConfig = {
   pageExtensions: ['ts', 'tsx'],
   /* other config options */
   images: {
-    domains: ['images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
 };
 

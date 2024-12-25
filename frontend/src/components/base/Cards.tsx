@@ -280,6 +280,7 @@ export function StepCard({
 }
 
 export function BenefitCard({
+  icon,
   title,
   description,
   className,
@@ -290,9 +291,9 @@ export function BenefitCard({
       variant="muted"
       header={
         <div className="space-y-3">
-          <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+          <div className="h-12 w-12 rounded-lg dark:bg-primary/10 bg-purple-100 flex items-center justify-center">
             {/* You can add an icon here */}
-            <div className="w-6 h-6 text-primary" />
+            <div className="w-6 h-6 dark:text-purple-600">{icon}</div>
           </div>
           <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
         </div>
