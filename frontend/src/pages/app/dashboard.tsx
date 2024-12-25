@@ -6,21 +6,14 @@ import {
   Trophy,
   Clock,
   TrendingUp,
-  Users,
   BookOpen,
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { Calendar } from "@/components/base/Calendar";
 import { CourseCard, StatCard, TopicCard } from "@/components/base/Cards";
-import Image from "next/image";
 import { PrimaryCarousel } from "@/components/base/Carousel";
+import { DateRange } from "react-day-picker";
+import { useState } from "react";
 
 // Course Progress Cards
 const CourseCards = () => (
@@ -207,9 +200,6 @@ const DebateTopicsCarousel = () => {
   );
 };
 
-// Updated Calendar Component
-<Calendar />
-
 // Upcoming Debates
 const UpcomingDebates = () => (
   <Card>
@@ -248,6 +238,7 @@ const UpcomingDebates = () => (
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
+  const [date, setDate] = useState<DateRange | undefined>(undefined);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
@@ -271,7 +262,7 @@ export default function DashboardPage() {
           <DebateTopicsCarousel />
         </div>
         <div className="space-y-6">
-          <Calendar />
+          <Calendar date={date} setDate={setDate} />
           <UpcomingDebates />
         </div>
       </div>

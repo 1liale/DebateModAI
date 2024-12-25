@@ -1,6 +1,5 @@
 import { TypographyH2, TypographyLarge } from "@/components/base/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageCircle } from "lucide-react";
 
 export default function FeedbackPage() {
   return (

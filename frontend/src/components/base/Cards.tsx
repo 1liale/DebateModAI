@@ -48,7 +48,13 @@ export const cardColors = {
     background: "bg-purple-50/50 dark:bg-purple-900/20",
     border: "border-purple-100 dark:border-purple-800",
     icon: {
+      background: "bg-white dark:bg-purple-800/30",
       color: "text-purple-600 dark:text-purple-400",
+    },
+    progress: {
+      background: "bg-purple-100 dark:bg-purple-800/30",
+      fill: "bg-purple-500",
+      text: "text-purple-600 dark:text-purple-400",
     },
   },
 };
