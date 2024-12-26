@@ -82,17 +82,17 @@ export const SideBar = () => {
   return (
     <aside
       className={`relative h-full border-r border-nav-border flex-shrink-0 transition-all duration-300 ease-in-out cursor-pointer hidden md:block ${
-        isOpen ? "w-[250px]" : "w-[62px]"
+        isOpen ? "w-[200px]" : "w-[50px]"
       }`}
       onClick={handleSidebarClick}
     >
       <div className="h-screen flex flex-col bg-gradient-to-t from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] border-nav-border overflow-hidden">
-        <div className="h-[80px] border-b border-nav-border p-3 mb-4 ml-1 flex items-center justify-between">
+        <div className="h-[60px] border-b border-nav-border p-2.5 mb-2 ml-1 flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center">
-              <Image src={logo} alt="Logo" width={30} height={38} />
+              <Image src={logo} alt="Logo" width={24} height={32} />
               {isOpen && (
-                <TypographyLarge className="text-[1.5rem] pt-1">
+                <TypographyLarge className="text-base pt-1">
                   ebate
                   <span className="text-brand">Mod</span>
                 </TypographyLarge>
@@ -101,11 +101,11 @@ export const SideBar = () => {
           </Link>
         </div>
 
-        <div className="flex-1 p-3 flex flex-col justify-start gap-1">
+        <div className="flex-1 p-1.5 flex flex-col justify-start gap-1">
           {menuItems.map((item, index) => (
             <div key={index}>
               {isOpen && item.section && (
-                <div className="text-xs font-semibold text-sidebar-text-muted uppercase tracking-wider px-3 py-2 mt-4">
+                <div className="text-[11px] font-semibold text-sidebar-text-muted uppercase tracking-wider px-3 py-1.5 mt-3">
                   {item.section}
                 </div>
               )}
@@ -118,7 +118,7 @@ export const SideBar = () => {
                       e.preventDefault();
                     }
                   }}
-                  className={`flex w-full items-center justify-start gap-3 px-3 py-2.5 rounded-lg 
+                  className={`flex w-full items-center justify-start gap-2.5 px-2.5 py-2 rounded-lg 
                     ${
                     router.pathname.includes(item.url!)
                       ? "bg-nav-active text-nav-text-active"
@@ -127,7 +127,7 @@ export const SideBar = () => {
                 >
                   {item.icon && (
                     <item.icon
-                      className={`${
+                      className={`h-4 w-4 ${
                         router.pathname.includes(item.url!)
                           ? "text-sidebar-text-active"
                           : "text-sidebar-text"
@@ -135,7 +135,7 @@ export const SideBar = () => {
                     />
                   )}
                   {isOpen && (
-                    <span className="text-sm font-medium truncate">
+                    <span className="text-xs font-medium truncate">
                       {item.title}
                     </span>
                   )}
@@ -146,7 +146,7 @@ export const SideBar = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="p-3 border-t border-sidebar-border">
+        <div className="p-1.5 border-t border-sidebar-border">
           <div className="w-full">
             {isOpen ? (
               <ThemeSwitch />
@@ -160,23 +160,23 @@ export const SideBar = () => {
           <LinkButton
             href="/help"
             variant="ghost"
-            className="flex w-full justify-start gap-3 px-3 py-2.5 text-sidebar-text hover:bg-nav-hover rounded-lg"
+            className="flex w-full justify-start gap-2.5 px-2.5 py-2 text-sidebar-text hover:bg-nav-hover rounded-lg"
           >
-            <HelpCircle />
+            <HelpCircle className="h-4 w-4" />
             {isOpen && (
-              <span className="text-sm font-medium">
+              <span className="text-xs font-medium">
                 Help & getting started
               </span>
             )}
           </LinkButton>
 
           <Button
-            className="flex w-full justify-start gap-3 px-3 py-2.5 text-sidebar-text hover:bg-nav-hover rounded-lg"
+            className="flex w-full justify-start gap-2.5 px-2.5 py-2 text-sidebar-text hover:bg-nav-hover rounded-lg"
             variant="ghost"
             onClick={handleLogout}
           >
-            <LogOut className="h-5 w-5 flex-shrink-0" />
-            {isOpen && <span className="text-sm font-medium">Logout</span>}
+            <LogOut className="h-4 w-4 flex-shrink-0" />
+            {isOpen && <span className="text-xs font-medium">Logout</span>}
           </Button>
         </div>
       </div>

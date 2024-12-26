@@ -87,16 +87,16 @@ export function CourseCard({
         "hover:shadow-lg transition-all"
       )}
     >
-      <CardContent className="pt-6">
+      <CardContent className="pt-4">
         <div
           className={cn(
-            "rounded-full w-12 h-12 flex items-center justify-center mb-4",
+            "rounded-full w-10 h-10 flex items-center justify-center mb-3",
             colors.icon.background
           )}
         >
-          <Icon className={cn("h-6 w-6", colors.icon.color)} />
+          <Icon className={cn("h-5 w-5", colors.icon.color)} />
         </div>
-        <h3 className="font-semibold text-lg mb-2">{title}</h3>
+        <h3 className="font-semibold text-base mb-2">{title}</h3>
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center gap-2">
             <Icon className="h-4 w-4" />
@@ -146,13 +146,13 @@ export function StatCard({
 
   return (
     <Card className={cn(colors.background, colors.border, "shadow-sm")}>
-      <CardContent className="p-4">
+      <CardContent className="p-3">
         <div className={cn("flex items-center gap-2 mb-1", colors.icon.color)}>
-          <Icon className="h-4 w-4" />
-          <span className="text-sm font-medium">{title}</span>
+          <Icon className="h-3.5 w-3.5" />
+          <span className="text-xs font-medium">{title}</span>
         </div>
-        <div className="text-2xl font-bold">{value}</div>
-        <div className="text-xs text-muted-foreground">{subtitle}</div>
+        <div className="text-xl font-bold">{value}</div>
+        <div className="text-[0.7rem] text-muted-foreground">{subtitle}</div>
       </CardContent>
     </Card>
   );
@@ -174,7 +174,7 @@ export function TopicCard({
 }: TopicCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all">
-      <div className="relative h-40 w-full">
+      <div className="relative h-32 w-full">
         <Image
           src={image}
           alt={title}
@@ -183,8 +183,8 @@ export function TopicCard({
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
-      <CardContent className="p-4">
-        <h4 className="font-semibold mb-2">{title}</h4>
+      <CardContent className="p-3">
+        <h4 className="font-semibold text-sm mb-2">{title}</h4>
         <Badge variant="secondary" className="mb-2">
           {category}
         </Badge>
@@ -224,16 +224,16 @@ export function BaseCard({
       {...props}
     >
       {(title || icon || header) && (
-        <CardHeader className="space-y-1">
+        <CardHeader className="space-y-1 p-3">
           {header || (
             <CardTitle className="flex items-center gap-3">
               {icon && <span className="text-primary">{icon}</span>}
-              {title && <span className="text-xl font-semibold">{title}</span>}
+              {title && <span className="text-lg font-semibold">{title}</span>}
             </CardTitle>
           )}
         </CardHeader>
       )}
-      <CardContent>
+      <CardContent className="p-3">
         {description && <p className="text-muted-foreground leading-relaxed">{description}</p>}
         {children}
       </CardContent>
@@ -261,11 +261,11 @@ export function StepCard({
     <BaseCard
       variant="muted"
       header={
-        <div className="space-y-4">
-          <span className="inline-block px-4 py-2 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+        <div className="space-y-3">
+          <span className="inline-block px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
             Step {stepNumber}
           </span>
-          <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
         </div>
       }
       className={cn(
@@ -274,7 +274,7 @@ export function StepCard({
       )}
       {...props}
     >
-      <p className="text-muted-foreground leading-relaxed">{description}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </BaseCard>
   )
 }
@@ -290,12 +290,11 @@ export function BenefitCard({
     <BaseCard
       variant="muted"
       header={
-        <div className="space-y-3">
-          <div className="h-12 w-12 rounded-lg dark:bg-primary/10 bg-purple-100 flex items-center justify-center">
-            {/* You can add an icon here */}
-            <div className="w-6 h-6 dark:text-purple-600">{icon}</div>
+        <div className="space-y-2">
+          <div className="h-10 w-10 rounded-lg dark:bg-primary/10 bg-purple-100 flex items-center justify-center">
+            <div className="w-5 h-5 dark:text-purple-600">{icon}</div>
           </div>
-          <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
         </div>
       }
       className={cn(
@@ -304,7 +303,7 @@ export function BenefitCard({
       )}
       {...props}
     >
-      <p className="text-muted-foreground leading-relaxed">{description}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </BaseCard>
   )
 }

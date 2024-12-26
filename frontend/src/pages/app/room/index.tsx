@@ -215,9 +215,9 @@ const PrejoinScreen: React.FC<PrejoinScreenProps> = ({ onJoin }) => {
   }
 
   return (
-    <div className="flex w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8 overflow-hidden">
-      <div className="flex-[2] flex items-center justify-center p-4">
-        <div className="flex-1">
+    <div className="flex flex-col md:flex-row w-full h-[calc(100vh-100px)] bg-background p-4 md:p-8 overflow-hidden">
+      <div className="flex-1 md:flex-[2] flex items-center justify-center p-2 md:p-4">
+        <div className="w-full max-w-3xl mx-auto">
           <div
             className={cn(
               "relative aspect-video bg-gray-950 rounded-lg overflow-hidden",
@@ -290,70 +290,74 @@ const ControlOverlays: React.FC<ControlOverlaysProps> = ({
   setSelectedAudioInput,
 }) => {
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-      <Button
-        variant="outline"
-        size="icon"
-        className={cn(
-          "bg-background/80 backdrop-blur-sm",
-          !videoEnabled && "bg-destructive hover:bg-destructive/90"
-        )}
-        onClick={() => setVideoEnabled(!videoEnabled)}
-      >
-        {videoEnabled ? (
-          <Video className="h-4 w-4" />
-        ) : (
-          <VideoOff className="h-4 w-4" />
-        )}
-      </Button>
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex flex-wrap gap-2 justify-center w-full max-w-[90%] px-2">
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn(
+            "bg-background/80 backdrop-blur-sm",
+            !videoEnabled && "bg-destructive hover:bg-destructive/90"
+          )}
+          onClick={() => setVideoEnabled(!videoEnabled)}
+        >
+          {videoEnabled ? (
+            <Video className="h-4 w-4" />
+          ) : (
+            <VideoOff className="h-4 w-4" />
+          )}
+        </Button>
 
-      <Select value={selectedVideoInput} onValueChange={setSelectedVideoInput}>
-        <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
-          <SelectValue placeholder="Select camera" />
-        </SelectTrigger>
-        <SelectContent>
-          {devices.videoInputs.map((device) => (
-            <SelectItem
-              key={device.deviceId}
-              value={device.deviceId || "default-camera"}
-            >
-              {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Select value={selectedVideoInput} onValueChange={setSelectedVideoInput}>
+          <SelectTrigger className="w-[140px] md:w-[180px] bg-background/80 backdrop-blur-sm">
+            <SelectValue placeholder="Select camera" />
+          </SelectTrigger>
+          <SelectContent>
+            {devices.videoInputs.map((device) => (
+              <SelectItem
+                key={device.deviceId}
+                value={device.deviceId || "default-camera"}
+              >
+                {device.label || `Camera ${device.deviceId.slice(0, 5)}...`}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <Button
-        variant="outline"
-        size="icon"
-        className={cn(
-          "bg-background/80 backdrop-blur-sm",
-          !audioEnabled && "bg-destructive hover:bg-destructive/90"
-        )}
-        onClick={() => setAudioEnabled(!audioEnabled)}
-      >
-        {audioEnabled ? (
-          <Mic className="h-4 w-4" />
-        ) : (
-          <MicOff className="h-4 w-4" />
-        )}
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn(
+            "bg-background/80 backdrop-blur-sm",
+            !audioEnabled && "bg-destructive hover:bg-destructive/90"
+          )}
+          onClick={() => setAudioEnabled(!audioEnabled)}
+        >
+          {audioEnabled ? (
+            <Mic className="h-4 w-4" />
+          ) : (
+            <MicOff className="h-4 w-4" />
+          )}
+        </Button>
 
-      <Select value={selectedAudioInput} onValueChange={setSelectedAudioInput}>
-        <SelectTrigger className="w-[180px] bg-background/80 backdrop-blur-sm">
-          <SelectValue placeholder="Select microphone" />
-        </SelectTrigger>
-        <SelectContent>
-          {devices.audioInputs.map((device) => (
-            <SelectItem
-              key={device.deviceId}
-              value={device.deviceId || "default-mic"}
-            >
-              {device.label || `Mic ${device.deviceId.slice(0, 5)}...`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Select value={selectedAudioInput} onValueChange={setSelectedAudioInput}>
+          <SelectTrigger className="w-[140px] md:w-[180px] bg-background/80 backdrop-blur-sm">
+            <SelectValue placeholder="Select microphone" />
+          </SelectTrigger>
+          <SelectContent>
+            {devices.audioInputs.map((device) => (
+              <SelectItem
+                key={device.deviceId}
+                value={device.deviceId || "default-mic"}
+              >
+                {device.label || `Mic ${device.deviceId.slice(0, 5)}...`}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 };

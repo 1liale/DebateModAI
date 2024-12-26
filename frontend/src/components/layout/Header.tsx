@@ -33,11 +33,11 @@ export const Header = ({ children, className }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 border-b backdrop-blur-sm bg-background/90 border-b-[1.5px] border-border/90 py-2 md:py-5 px-2 md:px-10",
+        "sticky top-0 z-50 border-b backdrop-blur-sm bg-background/90 border-b-[1.5px] border-border/90 py-2 md:py-3 px-2 md:px-10",
         className
       )}
     >
-      <div className="flex h-full items-center gap-2 px-4 sm:px-6 lg:px-8">
+      <div className="flex h-full items-center gap-2 px-2">
         {children}
       </div>
     </header>
@@ -52,48 +52,45 @@ export const UnauthHeader = () => {
     <Header>
       <div className="flex-1 flex items-center justify-between">
         {/* Logo */}
-
         <Link href="/">
-            <div className="flex items-center">
-              <Image src={logo} alt="Logo" width={30} height={38} />
-          
-              <TypographyLarge className="text-base md:text-3xl pt-0.5 md:pt-1">
-                ebate
-                <span className="text-brand">Mod</span>
-              </TypographyLarge>
-              
-            </div>
-          </Link>
+          <div className="flex items-center">
+            <Image src={logo} alt="Logo" width={24} height={24} />
+            <TypographyLarge className="text-lg pt-0.5">
+              ebate
+              <span className="text-brand">Mod</span>
+            </TypographyLarge>
+          </div>
+        </Link>
 
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-2">
           {/* Mobile Menu (hidden on desktop) */}
           <UnauthMobileMenu />
 
           {/* Desktop Menu (hidden on mobile) */}
-          <div className="hidden lg:flex items-center gap-4">
-            <LinkButton href="/#how-it-works" className="text-md">
+          <div className="hidden lg:flex items-center gap-3">
+            <LinkButton href="/#how-it-works" >
               About
             </LinkButton>
-            <LinkButton href="/#benefits" className="text-md">
+            <LinkButton href="/#benefits" >
               Features
             </LinkButton>
-            <LinkButton href="/faq" className="text-md">
+            <LinkButton href="/faq" >
               FAQ
             </LinkButton>
             <SignedIn>
               {!pathname.startsWith("/app") && (
-                <LinkButton href="/app/dashboard" variant="outline" className="text-md">
-                  Dashboard <ArrowUpRight className="h-4 w-4 ml-2" />
+                <LinkButton href="/app/dashboard" variant="outline" >
+                  Dashboard <ArrowUpRight className="h-3.5 w-3.5 ml-1.5" />
                 </LinkButton>
               )}
               <UserButton
                 appearance={{
                   elements: {
-                    avatarBox: "h-10 w-10",
+                    avatarBox: "h-8 w-8",
                     userButtonPopoverCard: {
                       pointerEvents: "initial",
                       zIndex: 100,
-                      marginTop: "16px",
+                      marginTop: "12px",
                     },
                   },
                   baseTheme: theme === "dark" ? customDarkTheme : undefined,
@@ -122,32 +119,32 @@ export const AuthHeader = () => {
   const { theme } = useTheme();
 
   return (
-    <Header className="min-h-[80px] bg-gradient-to-l from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
+    <Header className="h-[60px] bg-gradient-to-l from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))]">
       <div className="w-full flex items-center justify-between gap-2">
         <Link href="/">
           <Image
             src={logo}
             alt="Logo"
-            width={30}
-            height={38}
-            className="h-8 w-auto md:hidden"
+            width={28}
+            height={35}
+            className="h-7 w-auto md:hidden"
           />
         </Link>
-        <div className="flex-1 max-w-3xl relative">
+        <div className="flex-1 max-w-2xl relative">
           <Input
             type="text"
             placeholder="Search / Enter command"
-            className="bg-background/50 border-border/50 focus-visible:ring-brand/50 text-ellipsis"
+            className="bg-background/50 border-border/50 focus-visible:ring-brand/50 text-ellipsis h-9"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 text-muted-foreground pointer-events-none">
-            <span className="text-sm hidden md:block">⌘ F</span>
+            <span className="text-xs hidden md:block">⌘ F</span>
           </div>
         </div>
 
         {/* Right side controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <ThemeButton className="md:hidden" />
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center">
             <UserButton
               appearance={{
                 elements: {

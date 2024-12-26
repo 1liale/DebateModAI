@@ -19,6 +19,14 @@ import { useState } from "react";
 const CourseCards = () => (
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <CourseCard
+      title="Competition Prep"
+      lessons={18}
+      students={45}
+      progress={20}
+      icon={Trophy}
+      colorScheme="green"
+    />
+    <CourseCard
       title="Debate Fundamentals"
       lessons={24}
       students={99}
@@ -34,14 +42,7 @@ const CourseCards = () => (
       icon={Flame}
       colorScheme="orange"
     />
-    <CourseCard
-      title="Competition Prep"
-      lessons={18}
-      students={45}
-      progress={20}
-      icon={Trophy}
-      colorScheme="green"
-    />
+    
   </div>
 );
 
@@ -245,7 +246,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex-1 overflow-auto p-6">
+    <div className="flex-1 overflow-auto p-4">
       <div className="space-y-2 mb-8">
         <TypographyH2>
           Welcome back, {user?.firstName || "Debater"}!
@@ -255,13 +256,13 @@ export default function DashboardPage() {
         </TypographyLarge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1 space-y-4">
           <CourseCards />
           <StatsOverview />
           <DebateTopicsCarousel />
         </div>
-        <div className="space-y-6">
+        <div className="space-y-6 w-full md:w-[340px] flex-shrink-0">
           <Calendar date={date} setDate={setDate} />
           <UpcomingDebates />
         </div>

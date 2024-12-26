@@ -4,6 +4,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { TypographySmall } from "@/components/base/Typography";
 
 export function ThemeButton({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
@@ -53,40 +54,36 @@ export function ThemeSwitch() {
       {/* Sliding background */}
       <div
         className={`absolute inset-[4px] w-[calc(50%-4px)] rounded-full transition-all duration-300 ease-in-out
-          ${
-            theme === "light"
-              ? "left-[4px] bg-gray-100"
-              : "left-[calc(50%)] bg-gray-700"
-          }`}
+          ${theme === "light" ? "left-[4px] bg-gray-100" : "left-[calc(50%)] bg-gray-700"}`}
       />
       <div className="relative flex w-full">
         <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
           <Sun
-            className={`h-4 w-4 transition-colors duration-200 ${
+            className={`h-3.5 w-3.5 transition-colors duration-200 ${
               theme === "light" ? "text-gray-900" : "text-gray-400"
             }`}
           />
-          <span
-            className={`text-sm transition-colors duration-200 ${
+          <TypographySmall
+            className={`transition-colors duration-200 ${
               theme === "light" ? "text-gray-900" : "text-gray-400"
             }`}
           >
             Light
-          </span>
+          </TypographySmall>
         </div>
         <div className="flex items-center justify-center gap-1.5 w-1/2 px-2 py-1 z-10">
           <Moon
-            className={`h-4 w-4 transition-colors duration-200 ${
+            className={`h-3.5 w-3.5 transition-colors duration-200 ${
               !theme || theme === "dark" ? "text-gray-200" : "text-gray-400"
             }`}
           />
-          <span
-            className={`text-sm transition-colors duration-200 ${
+          <TypographySmall
+            className={`transition-colors duration-200 ${
               !theme || theme === "dark" ? "text-gray-200" : "text-gray-400"
             }`}
           >
             Dark
-          </span>
+          </TypographySmall>
         </div>
       </div>
     </div>

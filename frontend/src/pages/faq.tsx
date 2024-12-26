@@ -37,17 +37,17 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-12 ">
-      <div className="bg-gray-50 border-b">
-        <div className="container mx-auto px-4 py-16 flex flex-col lg:flex-row gap-12 items-center justify-center">
-          <div className="max-w-2xl lg:flex-1">
+    <div className="flex flex-col gap-8">
+      <div className="border-b bg-muted/50">
+        <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-8 items-center justify-center">
+          <div className="max-w-xl lg:flex-1">
             <TypographyH2>Frequently Asked Questions</TypographyH2>
-            <TypographyLarge className="text-muted-foreground mt-4">
+            <TypographyLarge className="text-muted-foreground mt-3">
               Have questions? Here you'll find the answers most valued by our users, along with access to step-by-step instructions and support.
             </TypographyLarge>
           </div>
           
-          <div className="hidden lg:block relative w-96 h-80 transform rotate-[6deg] transition-transform duration-300">
+          <div className="hidden lg:block relative w-80 h-64 transform rotate-[6deg] transition-transform duration-300">
             <Image 
               src={faqIllustration}
               alt="Frequently Asked Questions illustration"
@@ -59,15 +59,15 @@ export default function FAQPage() {
         </div>
       </div>
 
-      <Card className="container mx-auto max-w-6xl mb-24">
-        <CardContent className="pt-6">
+      <Card className="container mx-auto max-w-5xl mb-16 bg-card">
+        <CardContent className="pt-4">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-lg font-medium">
+                <AccordionTrigger className="text-base font-medium">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-base">
+                <AccordionContent className="text-sm">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
