@@ -9,43 +9,64 @@ import {
   TypographyH3,
 } from "@/components/base/Typography";
 import { YoutubeEmbed } from "@/components/misc/YoutubeEmbed";
-import { SignUpButton } from "@clerk/nextjs";
-import { MessageSquare, BarChart2, Layout, Clock } from "lucide-react";
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
+import {  MessageSquare, BarChart2, Layout, Clock } from "lucide-react";
 import { TestimonialCarousel } from "@/components/testimonials/TestimonialCarousel";
+import { useRouter } from "next/navigation";
 
-export const HeroSection = () => (
-  <section id="hero" className="flex items-center justify-center text-center relative min-h-screen md:pt-48">
-    <div className="container mx-auto px-4 flex flex-col items-center justify-center gap-8 md:gap-12">
-      <div className="flex flex-col gap-6">
-        <TypographyH1 className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent text-4xl md:text-5xl lg:text-6xl">
-          Debate with Confidence
-        </TypographyH1>
-        <TypographyLead className="max-w-2xl mx-auto text-base md:text-xl lg:text-2xl">
-          Elevate your debate skills with our AI-powered platform - practice
-          anytime, anywhere, and receive instant feedback!
-        </TypographyLead>
+export const HeroSection = () => {
+  const router = useRouter();
+  
+  return (
+    <section
+      id="hero"
+      className="flex items-center justify-center text-center relative min-h-screen md:pt-48"
+    >
+      <div className="container mx-auto px-4 flex flex-col items-center justify-center gap-8 md:gap-12">
+        <div className="flex flex-col gap-6">
+          <TypographyH1 className="bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent text-4xl md:text-5xl lg:text-6xl">
+            Debate with Confidence
+          </TypographyH1>
+          <TypographyLead className="max-w-2xl mx-auto text-base md:text-xl lg:text-2xl">
+            Elevate your debate skills with our AI-powered platform - practice
+            anytime, anywhere, and receive instant feedback!
+          </TypographyLead>
+        </div>
+        <div className="flex gap-4 justify-center">
+          <SignedOut>
+            <SignUpButton>
+              <PrimaryButton className="px-6 py-4 text-base">
+                Start Debating Today!
+              </PrimaryButton>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <PrimaryButton 
+              className="px-6 py-4 text-base"
+              onClick={() => router.push("/app")}
+            >
+              Start Debating Today!
+            </PrimaryButton>
+          </SignedIn>
+        </div>
+        <Image
+          src="https://media.istockphoto.com/id/1939002953/vector/businessman-silhouette-podium-debate.jpg?s=612x612&w=0&k=20&c=PTP0lCVifYdt3EliC0w5v58mDIi76csz-YFpN9K5yas="
+          alt="Debate illustration"
+          width={512}
+          height={512}
+          className="max-w-2xl w-full h-auto rounded-xl border border-gray-200 dark:border-gray-800 mt-6"
+          priority
+        />
       </div>
-      <div className="flex gap-4 justify-center">
-        <PrimaryButton className="px-6 py-4 text-base">
-          <SignUpButton fallbackRedirectUrl="/app">
-            Start Debating Today!
-          </SignUpButton>
-        </PrimaryButton>
-      </div>
-      <Image
-        src="https://media.istockphoto.com/id/1939002953/vector/businessman-silhouette-podium-debate.jpg?s=612x612&w=0&k=20&c=PTP0lCVifYdt3EliC0w5v58mDIi76csz-YFpN9K5yas="
-        alt="Debate illustration"
-        width={512}
-        height={512}
-        className="max-w-2xl w-full h-auto rounded-xl border border-gray-200 dark:border-gray-800 mt-6"
-        priority
-      />
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export const HowItWorksSection = () => (
-  <section id="how-it-works" className="h-screen flex items-center justify-center py-12">
+  <section
+    id="how-it-works"
+    className="h-screen flex items-center justify-center py-12"
+  >
     <div className="container mx-auto px-4 max-w-5xl">
       <div className="text-center mb-12">
         <Badge variant="secondary" className="mb-3">
@@ -81,7 +102,10 @@ export const HowItWorksSection = () => (
 );
 
 export const BenefitsSection = () => (
-  <section id="benefits" className="h-screen flex items-center py-8 dark:bg-gray-900/30 bg-gray-200/25">
+  <section
+    id="benefits"
+    className="h-screen flex items-center py-8 dark:bg-gray-900/30 bg-gray-200/25"
+  >
     <div className="container max-w-4xl mx-auto px-4">
       <div className="text-center mb-8">
         <Badge variant="secondary" className="mb-2">
@@ -133,8 +157,8 @@ export const SocialProofSection = () => {
             Don't take our word for it
           </TypographyH2>
           <TypographyLead className="max-w-2xl mx-auto text-base md:text-lg lg:text-xl">
-            Our users are our best ambassadors - discover why we're the top choice
-            for debate practice
+            Our users are our best ambassadors - discover why we're the top
+            choice for debate practice
           </TypographyLead>
         </div>
 

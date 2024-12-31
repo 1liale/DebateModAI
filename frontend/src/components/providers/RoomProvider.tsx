@@ -9,7 +9,7 @@ interface RoomContextType {
 
 const RoomContext = createContext<RoomContextType | null>(null);
 
-export function RoomProvider({ children }: { children: React.ReactNode }) {
+export const RoomProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [activeUsername, setActiveUsername] = useState<string | null>(null);
 

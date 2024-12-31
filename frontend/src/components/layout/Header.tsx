@@ -37,9 +37,7 @@ export const Header = ({ children, className }: HeaderProps) => {
         className
       )}
     >
-      <div className="flex h-full items-center gap-2 px-2">
-        {children}
-      </div>
+      <div className="flex h-full items-center gap-2 px-2">{children}</div>
     </header>
   );
 };
@@ -68,18 +66,12 @@ export const UnauthHeader = () => {
 
           {/* Desktop Menu (hidden on mobile) */}
           <div className="hidden lg:flex items-center gap-3">
-            <LinkButton href="/#how-it-works" >
-              About
-            </LinkButton>
-            <LinkButton href="/#benefits" >
-              Features
-            </LinkButton>
-            <LinkButton href="/faq" >
-              FAQ
-            </LinkButton>
+            <LinkButton href="/#how-it-works">About</LinkButton>
+            <LinkButton href="/#benefits">Features</LinkButton>
+            <LinkButton href="/faq">FAQ</LinkButton>
             <SignedIn>
               {!pathname.startsWith("/app") && (
-                <LinkButton href="/app/dashboard" variant="outline" >
+                <LinkButton href="/app/dashboard" variant="outline">
                   Dashboard <ArrowUpRight className="h-3.5 w-3.5 ml-1.5" />
                 </LinkButton>
               )}
@@ -98,12 +90,16 @@ export const UnauthHeader = () => {
               />
             </SignedIn>
             <SignedOut>
-              <PrimaryButton>
-                <SignInButton fallbackRedirectUrl="/" />
-              </PrimaryButton>
-              <SecondaryButton>
-                <SignUpButton fallbackRedirectUrl="/">Register</SignUpButton>
-              </SecondaryButton>
+              <SignInButton fallbackRedirectUrl="/">
+                <PrimaryButton>
+                  Sign In
+                </PrimaryButton>
+              </SignInButton>
+              <SignUpButton fallbackRedirectUrl="/">
+                <SecondaryButton>
+                  Register
+                </SecondaryButton>
+              </SignUpButton>
             </SignedOut>
           </div>
 

@@ -12,11 +12,13 @@ export const PrimaryButton = ({
   children,
   className,
   variant = "outline",
+  asChild = false,
   ...props
 }: ButtonProps) => (
   <Button
     variant={variant}
     className={cn(buttonVariants.primary, className)}
+    asChild={asChild}
     {...props}
   >
     {children}
@@ -27,11 +29,13 @@ export const SecondaryButton = ({
   children,
   className,
   variant = "default",
+  asChild = false,
   ...props
 }: ButtonProps) => (
   <Button
     variant={variant}
     className={cn(buttonVariants.secondary, className)}
+    asChild={asChild}
     {...props}
   >
     {children}

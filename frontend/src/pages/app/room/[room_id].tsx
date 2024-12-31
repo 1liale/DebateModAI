@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { Spinner } from "@/components/ui/spinner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import {  PrimaryButton } from "@/components/base/Buttons";
-import { useRoom } from '@/contexts/RoomContext';
+import { useRoom } from '@/components/providers/RoomProvider';
 import { Banner } from "@/components/base/Banner";
 import { Chat } from "@/components/room/Chat";
 import { VideoConference } from '@/components/room/VideoConference';

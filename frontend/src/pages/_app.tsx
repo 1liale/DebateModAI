@@ -9,7 +9,8 @@ import { SideBar } from "@/components/layout/SideBar";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "@/config/theme-provider";
 import { AuthHeader, UnauthHeader } from "@/components/layout/Header";
-import { RoomProvider } from "@/contexts/RoomContext";
+import { RoomProvider } from "@/components/providers/RoomProvider";
+import { FirebaseAuthProvider } from "@/components/providers/FirebaseAuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,11 +47,14 @@ const nacelle = localFont({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const isAuthRoute = router.pathname.startsWith("/app");
+  const isAppRoute = router.pathname.startsWith("/app");
+  const isAuthRoute = isAppRoute || router.pathname.startsWith("/onboarding");
+  
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <ClerkProvider afterSignOutUrl="/">
+        <FirebaseAuthProvider>
         <div
           className={`${inter.variable} ${nacelle.variable} font-inter min-h-screen`}
         >
@@ -63,7 +67,7 @@ export default function App({ Component, pageProps }: AppProps) {
               </main>
               <Footer />
             </>
-          ) : (
+          ) : isAppRoute ? (
             <RoomProvider>
               <div className="h-screen w-screen flex flex-col md:flex-row">
                 <SideBar />
@@ -75,8 +79,16 @@ export default function App({ Component, pageProps }: AppProps) {
                 </div>
               </div>
             </RoomProvider>
+          ) : (
+            <>
+              <BackgroundIllustration multiple />
+              <main className="flex-1 flex flex-col">
+              <Component {...pageProps} />
+              </main>
+            </>
           )}
         </div>
+        </FirebaseAuthProvider>
       </ClerkProvider>
     </ThemeProvider>
   );

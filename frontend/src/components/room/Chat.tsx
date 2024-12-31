@@ -1,5 +1,3 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, onChildAdded, push, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { TypographyLarge } from "@/components/base/Typography";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,20 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// Firebase configuration
-const firebaseConfig = {
-  // Replace with your Firebase config
-  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-
-// Add ChatMessage type
 type ChatMessage = {
   id: string;
-  username: string;
+  senderId: string;
   text: string;
   timestamp: number;
 };
@@ -36,31 +23,50 @@ export const Chat = ({
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    const chatRef = ref(database, `chats/${roomId}`);
-
-    // Listen for new messages
-    const unsubscribe = onChildAdded(chatRef, (snapshot) => {
-      const message = snapshot.val();
-      setMessages((prev) => [...prev, { ...message, id: snapshot.key }]);
-    });
-
-    return () => {
-      // Cleanup subscription
-      unsubscribe();
+    // Initial load of messages
+    const loadMessages = async () => {
+      try {
+        const response = await fetch(`/api/chat/messages?conversationId=${roomId}`);
+        const data = await response.json();
+        if (data) {
+          const messageArray = Object.entries(data).map(([id, msg]: [string, any]) => ({
+            id,
+            ...msg,
+          }));
+          setMessages(messageArray);
+        }
+      } catch (error) {
+        console.error('Error loading messages:', error);
+        setMessages([]);
+      }
     };
+
+    loadMessages();
   }, [roomId]);
 
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
-    const chatRef = ref(database, `chats/${roomId}`);
-    await push(chatRef, {
-      username,
-      text: newMessage,
-      timestamp: Date.now(),
-    });
+    try {
+      const response = await fetch(`/api/chat/messages?conversationId=${roomId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderId: username,
+          text: newMessage,
+        }),
+      });
 
-    setNewMessage("");
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setNewMessage("");
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
@@ -77,12 +83,12 @@ export const Chat = ({
             key={message.id}
             className={cn(
               "mb-4 max-w-[80%] rounded-lg p-2",
-              message.username === username
+              message.senderId === username
                 ? "ml-auto bg-primary text-primary-foreground"
                 : "bg-[hsl(var(--chat-bg))] text-foreground"
             )}
           >
-            <div className="text-sm font-medium">{message.username}</div>
+            <div className="text-sm font-medium">{message.senderId}</div>
             <div className="text-sm">{message.text}</div>
           </div>
         ))}

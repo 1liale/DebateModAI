@@ -18,7 +18,7 @@ import {
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Video, VideoOff, Mic, MicOff } from "lucide-react";
-import { useRoom } from '@/contexts/RoomContext';
+import { useRoom } from '@/components/providers/RoomProvider';
 
 // Interfaces
 interface DeviceState {
