@@ -48,11 +48,20 @@ export async function sendMessage(
   message: MessageInput
 ) {
   const chatRef = ref(realtimeDb, `chats/${conversationId}`);
-  const newMessageRef = push(chatRef);
+  const newMessageRef = doc(collection(db, "conversations", conversationId, "messages"));
 
-  const messageData = {
-    ...message,
+  interface MessageData {
+    timestamp: number;
+    senderId: string;
+    text: string;
+    type?: "text" | "image" | "file";
+  }
+
+  const messageData: MessageData = {
     timestamp: Date.now(),
+    senderId: message.senderId,
+    text: message.text,
+    type: "text"
   };
 
   await setDoc(newMessageRef, messageData);
@@ -61,12 +70,12 @@ export async function sendMessage(
     message.text.substring(0, 100)
   );
 
-  return { id: newMessageRef.key, ...messageData };
+  return { id: newMessageRef.id, ...messageData };
 }
 
 export async function getMessages(conversationId: string, limit: number = 50) {
   const currentUser = firebase_auth.currentUser;
-  console.log("CURRENT USER", currentUser);
+  console.log("CURRENT USER", firebase_auth);
 
   const chatRef = ref(realtimeDb, `chats/${conversationId}`);
   const messagesQuery = query(
