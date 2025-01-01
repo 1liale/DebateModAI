@@ -23,21 +23,33 @@ const onboardingSteps = [
     id: "welcome",
     title: "Welcome to DebateModAI",
     description: "We're excited to help you enhance your debate skills and knowledge. Let's get started by personalizing your experience.",
+    image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3",
+    cardTitle: "Welcome to DebateModAI",
+    cardDescription: "Your journey to becoming a better debater starts here"
   },
   {
     id: "role",
     title: "What brings you here?",
     description: "Tell us about your role in debate.",
+    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3",
+    cardTitle: "Choose Your Path",
+    cardDescription: "Whether you're teaching or learning, we'll adapt to your needs"
   },
   {
     id: "experience",
     title: "Your Debate Experience",
     description: "Help us tailor the experience to your level.",
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3",
+    cardTitle: "Experience Matters",
+    cardDescription: "We'll customize content based on your expertise level"
   },
   {
     id: "topics",
     title: "Preferences",
     description: "Tell us about topics that interests you!",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3",
+    cardTitle: "Discover Your Interests",
+    cardDescription: "Choose topics that spark your passion for debate"
   },
 ];
 
@@ -188,19 +200,7 @@ export default function OnboardingPage() {
                               : prev.topics,
                           }))
                         }
-                        className={`h-auto py-4 transition-all ${
-                          formData.topics.includes(topic)
-                            ? 'border-[1.5px] ring-offset-background' +
-                              (['ring-red-500 border-red-500',
-                                'ring-orange-500 border-orange-500',
-                                'ring-yellow-500 border-yellow-500',
-                                'ring-green-500 border-green-500',
-                                'ring-blue-500 border-blue-500',
-                                'ring-indigo-500 border-indigo-500',
-                                'ring-purple-500 border-purple-500',
-                              ][Math.floor(Math.random() * 7)])
-                            : ''
-                        }`}
+                        className={`h-auto py-4 transition-all border-2 ${ formData.topics.includes(topic) && 'border-purple-500/50'}`}
                         disabled={!formData.topics.includes(topic) && formData.topics.length >= 3}
                       >
                         {topic}
@@ -252,19 +252,24 @@ export default function OnboardingPage() {
         {/* Right Column - Image Card */}
         <div className="w-1/2 p-8">
           <Card className="h-full relative overflow-hidden">
-            <Image
-              src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3"
-              alt="Debate illustration"
-              fill
-              className="object-cover"
-              priority
-            />
+            <div className="absolute inset-0">
+              <Image
+                src={onboardingSteps[currentStep].image}
+                alt={`${onboardingSteps[currentStep].id} illustration`}
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent backdrop-blur-[2px]" />
+            </div>
             <div className="absolute inset-0 p-8 flex items-end">
               <div className="text-white">
-                <h2 className="text-3xl font-semibold mb-3">Welcome to DebateModAI</h2>
-                <p className="text-lg opacity-90 leading-relaxed">
-                  Your journey to becoming a better debater starts here
-                </p>
+                <TypographyH2 className="text-white mb-3">
+                  {onboardingSteps[currentStep].cardTitle}
+                </TypographyH2>
+                <TypographyLead className="text-white/90">
+                  {onboardingSteps[currentStep].cardDescription}
+                </TypographyLead>
               </div>
             </div>
           </Card>
