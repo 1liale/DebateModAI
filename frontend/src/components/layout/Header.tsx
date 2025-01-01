@@ -22,7 +22,7 @@ import logo from "@/public/images/logo.svg";
 import { ThemeButton } from "../misc/ThemeWidget";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { TypographyLarge } from "../base/Typography";
+import { TypographyLarge } from "@/components/base/Typography";
 
 interface HeaderProps {
   children: ReactNode;

@@ -1,0 +1,15 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="300.000000pt" height="376.000000pt" viewBox="0 0 300.000000 376.000000" preserveAspectRatio="xMidYMid meet">
+  <!-- Add gradient definition -->
+  <defs>
+    <linearGradient id="purpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9b4dca;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6b1197;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Update fill to use gradient -->
+  <g transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)" fill="url(#purpleGradient)" stroke="none">
+    <path d="M310 2129 l0 -1201 24 15 c43 28 480 349 524 384 l42 34 0 690 0 689 143 0 c145 0 269 -16 362 -46 227 -75 427 -249 540 -472 l37 -72 31 22 c29 20 126 91 332 243 39 29 80 58 93 66 12 8 22 21 22 29 0 22 -85 156 -158 249 -231 293 -596 500 -979 555 -90 13 -200 16 -562 16 l-451 0 0 -1201z"/>
+    <path d="M2360 2327 c-133 -98 -234 -179 -233 -188 0 -8 11 -50 23 -94 101 -376 -59 -787 -394 -1010 -170 -113 -284 -145 -539 -152 l-187 -5 0 236 0 237 -72 -53 c-40 -30 -173 -127 -296 -217 l-222 -164 0 -314 0 -315 512 5 c510 4 514 4 618 30 318 78 529 195 751 416 238 238 374 500 430 826 27 157 23 407 -10 558 -35 160 -115 377 -139 377 -4 0 -113 -78 -242 -173z"/>
+  </g>
+</svg> 
