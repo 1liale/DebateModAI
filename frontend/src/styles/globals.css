@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --radius: 0.5rem;
-    --background: 0 0% 100%;
+    --background: 220 25% 97%;
     --foreground: 240 10% 3.9%;
     
     /* Navigation colors - light mode */
@@ -52,13 +52,13 @@
     /* In :root (light mode) */
     --chat-bg: 220 13% 96%;  /* Light gray for chat messages */
     --chat-text: 240 10% 3.9%;  /* Dark text */
-    --app-background: 220 13% 91%;  /* Slightly darker background for sidebar/header */
+    --app-background: 220 25% 97%;
     --chat-header: 220 13% 93%;
     --chat-input: 220 13% 98%;
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 222 47% 11%;
     --foreground: 210 20% 98%;
     
     /* Navigation colors - dark mode */

@@ -60,7 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           {!isAuthRoute ? (
             <>
-              <BackgroundIllustration multiple />
+              <BackgroundIllustration />
               <UnauthHeader />
               <main className="flex-1 flex flex-col">
                 <Component {...pageProps} />
@@ -81,7 +81,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </RoomProvider>
           ) : (
             <>
-              <BackgroundIllustration multiple />
+              <BackgroundIllustration />
               <main className="flex-1 flex flex-col">
               <Component {...pageProps} />
               </main>

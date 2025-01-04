@@ -3,6 +3,10 @@ import { cn } from '@/lib/utils'
 import { Badge } from "@/components/ui/badge";
 import { LucideIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { formatDate } from '@/server/resolver/blog';
+import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/base/Typography";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 // Base color configurations
 export const cardColors = {
   blue: {
@@ -306,4 +310,90 @@ export function BenefitCard({
       <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </BaseCard>
   )
+}
+
+interface BlogCardProps {
+  title: string;
+  description: string;
+  publishedAt: string;
+  imageUrl: string;
+  href: string;
+  variant?: 'vertical' | 'horizontal';
+  author?: {
+    name: string;
+    avatar?: string;
+  };
+}
+
+export function BlogCard({
+  title,
+  description,
+  publishedAt,
+  imageUrl,
+  href,
+  variant = 'vertical',
+  author,
+}: BlogCardProps) {
+  return (
+    <Link href={href}>
+      <Card className="border-[1.5px] group overflow-hidden border-background dark:border-background dark:shadow-none shadow-none hover:shadow-lg dark:hover:border-gray-50/50 dark:border-gray-50/10 transition-all">
+        <CardContent className={cn(
+          "p-2 bg-background h-full",
+          variant === 'horizontal' && "flex gap-4"
+        )}>
+          {imageUrl && (
+            <div className={cn(
+              "relative overflow-hidden rounded-lg shrink-0",
+              variant === 'vertical' ? "aspect-[16/9] w-full mb-4" : "aspect-square w-24"
+            )}>
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                className="object-cover"
+                sizes={variant === 'vertical' 
+                  ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  : "112px"
+                }
+              />
+            </div>
+          )}
+          <div className={cn(
+            "flex flex-col",
+            variant === 'horizontal' && "flex-1 justify-center"
+          )}>
+            <TypographyH3 className="mb-2">{title}</TypographyH3>
+            <TypographyMuted className="mb-4 line-clamp-2">
+              {description}
+            </TypographyMuted>
+            <div className="flex items-center gap-2 mt-auto">
+              {author && (
+                <>
+                  <div className="flex items-center gap-2">
+                    {author.avatar ? (
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage src={author.avatar} alt={author.name} />
+                        <AvatarFallback>{author.name[0]}</AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback>{author.name[0]}</AvatarFallback>
+                      </Avatar>
+                    )}
+                    <TypographySmall className="text-muted-foreground">
+                      {author.name}
+                    </TypographySmall>
+                  </div>
+                  <span className="text-muted-foreground">•</span>
+                </>
+              )}
+              <TypographySmall className="text-muted-foreground">
+                {formatDate(publishedAt)}
+              </TypographySmall>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
 }
