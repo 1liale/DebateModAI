@@ -62,6 +62,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.1",
     "simple-peer": "^9.11.1",
+    "strapi-provider-firebase-storage": "^1.0.4",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "unified": "^11.0.5",

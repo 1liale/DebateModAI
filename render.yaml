@@ -1,0 +1,21 @@
+services:
+- type: pserv
+  repo: https://github.com/yourusername/debatemodai
+  rootDir: backend
+  name: debate-mod-agent
+  runtime: image
+  plan: starter
+
+  envVars:
+  - fromGroup: debate-mod-env
+
+  region: virginia
+  maxShutdownDelaySeconds: 300
+
+  scaling:
+    minInstances: 1
+    maxInstances: 4
+    targetCPUPercent: 75
+    targetMemoryPercent: 75
+
+version: "1" 

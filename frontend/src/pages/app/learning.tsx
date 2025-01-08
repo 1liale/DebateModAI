@@ -190,7 +190,7 @@ export default function LearningPage() {
                   title={post.attributes.title}
                   description={post.attributes.description}
                   publishedAt={post.attributes.publishedAt}
-                  imageUrl={getStrapiMedia(post.attributes.cover.data?.attributes.url)}
+                  imageUrl={getStrapiMedia(post.attributes.cover.data?.attributes.url) || ''}
                   href={`/app/posts/${post.attributes.slug}`}
                 />
               ))}

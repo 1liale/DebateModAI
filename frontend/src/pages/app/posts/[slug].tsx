@@ -126,9 +126,9 @@ export default function BlogPost({ post }: BlogPostProps) {
         {/* Article Header */}
         <article className="space-y-6">
           <div className="space-y-4">
-            <Badge variant="secondary">
+            {/* <Badge variant="secondary">
               {post.attributes.category?.data?.attributes?.name}
-            </Badge>
+            </Badge> */}
             
             <TypographyH1>{post.attributes.title}</TypographyH1>
             
@@ -150,7 +150,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           {post.attributes.cover?.data && (
             <div className="relative aspect-[16/9] w-3/4 mx-auto overflow-hidden rounded-lg">
               <Image
-                src={getStrapiMedia(post.attributes.cover.data.attributes.url)}
+                src={getStrapiMedia(post.attributes.cover.data.attributes.url) || ''}
                 alt={post.attributes.title}
                 fill
                 className="object-cover"
