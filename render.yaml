@@ -1,6 +1,6 @@
 services:
 - type: pserv
-  repo: https://github.com/yourusername/debatemodai
+  repo: https://github.com/1liale/debatemodai
   rootDir: backend
   name: debate-mod-agent
   runtime: image
