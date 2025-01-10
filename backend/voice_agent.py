@@ -2,6 +2,8 @@ from livekit.agents import llm, JobContext, JobProcess
 from livekit.agents.pipeline import VoicePipelineAgent
 from livekit.plugins import openai, silero, deepgram, google
 from dotenv import load_dotenv
+import os
+import json
 
 load_dotenv()
 
@@ -32,7 +34,10 @@ class BasicAgent:
             vad=ctx.proc.userdata["vad"],
             stt=deepgram.STT(model="nova-2-general"),
             llm=openai.LLM(model="gpt-4o-mini"),
-            tts=google.TTS(voice_name="en-US-Wavenet-J"),
+            tts=google.TTS(
+                voice_name="en-US-Wavenet-J",
+                credentials_info=json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON'))
+            ),
             chat_ctx=self.initial_ctx,
             allow_interruptions=True,
         )
