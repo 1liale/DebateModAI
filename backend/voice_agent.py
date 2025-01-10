@@ -32,7 +32,7 @@ class BasicAgent:
             vad=ctx.proc.userdata["vad"],
             stt=deepgram.STT(model="nova-2-general"),
             llm=openai.LLM(model="gpt-4o-mini"),
-            tts=google.TTS(voice_name="en-US-Wavenet-J", credentials_file="./credentials.json"),
+            tts=google.TTS(voice_name="en-US-Wavenet-J"),
             chat_ctx=self.initial_ctx,
             allow_interruptions=True,
         )
