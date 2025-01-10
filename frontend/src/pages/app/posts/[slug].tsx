@@ -1,9 +1,11 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getPostBySlug, formatDate, getStrapiMedia } from '@/server/resolver/blog';
-import { TypographyH1, TypographyLead } from '@/components/base/Typography';
-import { Badge } from '@/components/ui/badge';
-import Image from 'next/image';
+import { formatDate } from '@/utils/date';
+import { getPostBySlug } from "@/server/resolver/blog";
+import {
+  TypographyH1,
+  TypographyLead,
+  TypographyMuted,
+} from "@/components/base/Typography";
+import Image from "next/image";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,10 +13,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Card } from '@/components/ui/card';
-import { Clock, Calendar } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+} from "@/components/ui/breadcrumb";
+import { Clock, User } from "lucide-react";
+import { GetServerSideProps } from "next";
 import { postRenderer } from "@/utils/post-renderer";
 
 interface Block {
@@ -57,20 +58,21 @@ interface Article {
     };
     blocks: Block[];
     publishedAt: string;
+    updatedAt: string;
   };
 }
 
 // Helper function to estimate read time
 const calculateReadTime = (content?: Block[]) => {
   const wordsPerMinute = 200;
-  let textContent = '';
-  
+  let textContent = "";
+
   // Extract text from different block types
-  content?.forEach(block => {
-    if (block.body) textContent += block.body + ' ';
-    if (block.text) textContent += block.text + ' ';
+  content?.forEach((block) => {
+    if (block.body) textContent += block.body + " ";
+    if (block.text) textContent += block.text + " ";
   });
-  
+
   const words = textContent.trim().split(/\s+/).length;
   const readTime = Math.ceil(words / wordsPerMinute);
   return readTime;
@@ -82,21 +84,23 @@ interface BlogPostProps {
 }
 
 // Convert to SSR using getServerSideProps
-export const getServerSideProps: GetServerSideProps<BlogPostProps> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<BlogPostProps> = async ({
+  params,
+}) => {
   try {
     const slug = params?.slug as string;
     const post = await getPostBySlug(slug);
     return {
       props: {
-        post
-      }
+        post,
+      },
     };
   } catch (error) {
-    console.error('Error fetching post:', error);
+    console.error("Error fetching post:", error);
     return {
       props: {
-        post: null
-      }
+        post: null,
+      },
     };
   }
 };
@@ -129,28 +133,42 @@ export default function BlogPost({ post }: BlogPostProps) {
             {/* <Badge variant="secondary">
               {post.attributes.category?.data?.attributes?.name}
             </Badge> */}
-            
+
             <TypographyH1>{post.attributes.title}</TypographyH1>
-            
-            <div className="flex items-center gap-4 text-muted-foreground justify-center">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(post.attributes.publishedAt)}</span>
+
+            <div className="flex flex-col gap-4 items-center">
+              {/* Created and Updated */}
+              <div className="flex items-center gap-6 text-muted-foreground">
+                <TypographyMuted className="text-base">
+                  Created: {formatDate(post.attributes.publishedAt)}
+                </TypographyMuted>
+                <TypographyMuted className="text-base">
+                  Updated: {formatDate(post.attributes.updatedAt)}
+                </TypographyMuted>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{readTime} min read</span>
+              {/* Author and Read Time */}
+              <div className="flex items-center gap-6 text-muted-foreground">
+                {post.attributes.authorsBio?.data && (
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <TypographyMuted className="text-base">
+                      {post.attributes.authorsBio.data.attributes.name}
+                    </TypographyMuted>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <TypographyMuted className="text-base">{readTime} min read</TypographyMuted>
+                </div>
               </div>
             </div>
-
-            <TypographyLead>{post.attributes.description}</TypographyLead>
           </div>
 
           {/* Cover Image */}
           {post.attributes.cover?.data && (
             <div className="relative aspect-[16/9] w-3/4 mx-auto overflow-hidden rounded-lg">
               <Image
-                src={getStrapiMedia(post.attributes.cover.data.attributes.url) || ''}
+                src={post.attributes.cover.data.attributes.url}
                 alt={post.attributes.title}
                 fill
                 className="object-cover"
@@ -159,10 +177,14 @@ export default function BlogPost({ post }: BlogPostProps) {
             </div>
           )}
 
+          <TypographyLead>{post.attributes.description}</TypographyLead>
+
           {/* Article Content */}
           <div className="prose prose-lg dark:prose-invert max-w-5xl mx-auto">
             <div className="dark:text-gray-100 text-left">
-              {post.attributes.blocks?.map((block, index) => postRenderer(block, index))}
+              {post.attributes.blocks?.map((block, index) =>
+                postRenderer(block, index)
+              )}
             </div>
           </div>
         </article>

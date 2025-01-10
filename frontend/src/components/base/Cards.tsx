@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatDate } from '@/server/resolver/blog';
+import { formatDate } from '@/utils/date';
 import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/base/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 // Base color configurations
@@ -344,7 +344,7 @@ export function BlogCard({
           {imageUrl && (
             <div className={cn(
               "relative overflow-hidden rounded-lg shrink-0",
-              variant === 'vertical' ? "aspect-[16/9] w-full mb-4" : "aspect-square w-24"
+              variant === 'vertical' ? "aspect-[4/3] w-full mb-4" : "aspect-square w-24"
             )}>
               <Image
                 src={imageUrl}
@@ -367,26 +367,24 @@ export function BlogCard({
               {description}
             </TypographyMuted>
             <div className="flex items-center gap-2 mt-auto">
-              {author && (
+              {author ? (
                 <>
                   <div className="flex items-center gap-2">
-                    {author.avatar ? (
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src={author.avatar} alt={author.name} />
-                        <AvatarFallback>{author.name[0]}</AvatarFallback>
-                      </Avatar>
-                    ) : (
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback>{author.name[0]}</AvatarFallback>
-                      </Avatar>
-                    )}
+                  <Avatar className="h-6 w-6">
+                      <AvatarImage src={author?.avatar} alt={author.name} />
+                      <AvatarFallback>{author.name[0]}</AvatarFallback>
+                    </Avatar>
                     <TypographySmall className="text-muted-foreground">
                       {author.name}
                     </TypographySmall>
                   </div>
-                  <span className="text-muted-foreground">•</span>
                 </>
+              ) : (
+                <TypographySmall className="text-muted-foreground">
+                  AI Generated
+                </TypographySmall>
               )}
+              <TypographyMuted className="text-xs">•</TypographyMuted>
               <TypographySmall className="text-muted-foreground">
                 {formatDate(publishedAt)}
               </TypographySmall>

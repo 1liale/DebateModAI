@@ -3,7 +3,7 @@ services:
   repo: https://github.com/1liale/debatemodai
   rootDir: backend
   name: debate-mod-agent
-  runtime: image
+  runtime: docker
   plan: starter
 
   envVars:

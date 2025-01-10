@@ -14,7 +14,6 @@ const fetchAPI = async (path: string, urlParamsObject = {}, options = {}) => {
     // Build request URL
     const queryString = qs.stringify(urlParamsObject);
     const requestUrl = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api${path}${queryString ? `?${queryString}` : ""}`;
-    console.log("requestUrl", requestUrl);
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
     const data = await response.json();
@@ -43,7 +42,6 @@ export const getAllPosts = async (page: number = 1) => {
     },
     sort: ["publishedAt:desc"],
   });
-  console.log("response", response);
   return response;
 };
 
