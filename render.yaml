@@ -4,8 +4,8 @@ services:
   rootDir: backend
   name: debate-mod-agent
   runtime: docker
-  plan: starter
-  numInstances: 2
+  plan: standard
+  numInstances: 1
 
   envVars:
   - fromGroup: debate-mod-env
