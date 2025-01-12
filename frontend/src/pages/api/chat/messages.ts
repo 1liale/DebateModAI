@@ -4,8 +4,7 @@ import { getMessages, sendMessage } from '@/server/resolver/chat';
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const conversationId = req.query.conversationId as string;
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
-  // const messages = await getMessages(conversationId, limit);
-  const messages = [];
+  const messages = await getMessages(conversationId, limit);
   return res.status(200).json(messages);
 }
 
