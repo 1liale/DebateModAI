@@ -53,6 +53,7 @@ export const useFirebaseAuth = () => {
           // Sign in to Firebase and get auth result
           const userCredential = await signInWithCustomToken(firebase_auth, token);
           firebase_auth.updateCurrentUser(userCredential.user);
+          console.log("Firebase user credential", userCredential);
   
           // Check if metadata indicates this is a first-time sign in
           const metadata = userCredential.user.metadata;
