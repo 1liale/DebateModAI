@@ -5,17 +5,12 @@ services:
   name: debate-mod-agent
   runtime: docker
   plan: starter
+  numInstances: 2
 
   envVars:
   - fromGroup: debate-mod-env
 
   region: virginia
   maxShutdownDelaySeconds: 300
-
-  scaling:
-    minInstances: 1
-    maxInstances: 4
-    targetCPUPercent: 60
-    targetMemoryPercent: 60
 
 version: "1" 
