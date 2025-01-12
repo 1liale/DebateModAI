@@ -57,7 +57,7 @@ async def entrypoint(ctx: JobContext):
             asyncio.create_task(answer_from_text(msg.message))
 
     await agent.say(
-        "Welcome to the debate. Let's begin by discussing social media's impact on youth development."
+        "Welcome to the debate. Let's begin by discussing social media's impact on youth development.", allow_interruptions=False
     )
 
 

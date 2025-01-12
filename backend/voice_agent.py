@@ -21,6 +21,8 @@ class BasicAgent:
             3. Support claims with relevant examples and evidence
             4. Maintain a respectful and professional tone
             5. Be open to different perspectives while defending your position
+            6. You should use short and concise responses that is suitabe for a debate setting
+            7. Avoiding usage of unpronouncable punctuation, readable text only.
             
             Engage in constructive dialogue and avoid confrontational language.
             Use short and concise responses, and avoid unpronounceable punctuation.
