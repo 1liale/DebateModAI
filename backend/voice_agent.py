@@ -39,13 +39,13 @@ class BasicAgent:
         self.agent = VoicePipelineAgent(
             vad=ctx.proc.userdata["vad"],
             stt=deepgram.STT(model="nova-2-general"),
-            llm=openai.LLM(model="gpt-4o"),
+            llm=openai.LLM(model="gpt-4o-mini"),
             tts=google.TTS(
                 voice_name="en-US-Wavenet-J",
                 credentials_info=json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON'))
             ),
             chat_ctx=self.initial_ctx,
-            turn_detector=turn_detector.EOUModel()
+            turn_detector=turn_detector.EOUModel(),
             allow_interruptions=False,
         )
 
