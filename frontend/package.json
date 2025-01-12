@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "preview": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "livekit": "livekit-server --dev"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.4.0",

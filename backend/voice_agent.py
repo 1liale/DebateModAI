@@ -46,7 +46,6 @@ class BasicAgent:
             ),
             chat_ctx=self.initial_ctx,
             turn_detector=turn_detector.EOUModel(),
-            allow_interruptions=False,
         )
 
     def get_agent(self):

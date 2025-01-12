@@ -46,12 +46,12 @@ export default async function handler(
       );
 
       // Check if username already exists in the room
-      if (participants.some((participant) => participant.name === username)) {
-        return res
-          .status(500)
-          .json({ error: "Username already exists in the room" });
-      }
-      console.log("Current participants in room:", participants);
+      // if (participants.some((participant) => participant.name === username)) {
+      //   return res
+      //     .status(500)
+      //     .json({ error: "Username already exists in the room" });
+      // }
+      // console.log("Current participants in room:", participants);
     }
   } catch (error) {
     console.error("Error listing participants:", error);

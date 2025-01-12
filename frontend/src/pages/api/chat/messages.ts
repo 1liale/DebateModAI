@@ -4,8 +4,16 @@ import { getMessages, sendMessage } from '@/server/resolver/chat';
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const conversationId = req.query.conversationId as string;
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
-  const messages = await getMessages(conversationId, limit);
-  return res.status(200).json(messages);
+  console.log("Getting messages for conversation", conversationId, limit);
+  
+  try {
+    const messages = await getMessages(conversationId, limit);
+    console.log("Messages", messages);
+    return res.status(200).json(messages);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    return res.status(500).json({ error: 'Failed to fetch messages' });
+  }
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {

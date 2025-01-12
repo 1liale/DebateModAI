@@ -11,9 +11,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import {  PrimaryButton } from "@/components/base/Buttons";
 import { useRoom } from '@/components/providers/RoomProvider';
 import { Banner } from "@/components/base/Banner";
-import { Chat } from "@/components/room/Chat";
 import { VideoConference } from '@/components/room/VideoConference';
 import { TypographyP } from '@/components/base/Typography';
+import { Chat } from '@/components/room/Chat';
+import { SimpleVoiceAssistant } from '@/components/room/SimpleVoiceAssistant';
 
 const Page = () => {
   const router = useRouter();
@@ -103,17 +104,21 @@ const Page = () => {
         <div className="flex-1 bg-background flex flex-col min-h-0">
           <div className="p-2 flex-shrink-0">
             <Banner>
-            THB social media has done more harm than good to the development of youth in the country.
+              THB social media has done more harm than good to the development of youth in the country.
             </Banner>
           </div>
           
           <div className="flex-1 relative min-h-0">
+            <SimpleVoiceAssistant />
             <VideoConference />
             <RoomAudioRenderer />
             <ControlBar />
           </div>
         </div>
-        <Chat roomId={room_id as string} username={username as string} />
+        <div className="w-80 h-full border-l border-border">
+          <Chat roomId={room_id as string} username={username as string} />
+        </div>
+        
       </div>
     </LiveKitRoom>
   );
