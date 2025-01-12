@@ -1,6 +1,6 @@
 from livekit.agents import llm, JobContext, JobProcess
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import openai, silero, deepgram, google
+from livekit.plugins import openai, silero, deepgram, google, turn_detector
 from dotenv import load_dotenv
 import os
 import json
@@ -42,7 +42,7 @@ class BasicAgent:
                 credentials_info=json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON'))
             ),
             chat_ctx=self.initial_ctx,
-            allow_interruptions=True,
+            turn_detector=turn_detector.EOUModel()
         )
 
     def get_agent(self):
