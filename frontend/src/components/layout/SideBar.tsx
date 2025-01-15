@@ -158,7 +158,7 @@ export const SideBar = () => {
           </div>
 
           <LinkButton
-            href="/help"
+            href="/faq"
             variant="ghost"
             className="flex w-full justify-start gap-2.5 px-2.5 py-2 text-sidebar-text hover:bg-nav-hover rounded-lg"
           >

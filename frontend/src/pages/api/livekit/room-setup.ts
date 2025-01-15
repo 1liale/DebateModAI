@@ -5,20 +5,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "GET") {
+  if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { room: roomId, username } = req.query;
+  const { roomId, username, topic } = req.body;
 
   // Validate request parameters
   if (!roomId) {
-    return res.status(400).json({ error: 'Missing "room" query parameter' });
+    return res.status(400).json({ error: 'Missing "roomId" in request body' });
   }
   if (!username) {
-    return res
-      .status(400)
-      .json({ error: 'Missing "username" query parameter' });
+    return res.status(400).json({ error: 'Missing "username" in request body' });
   }
 
   // Validate environment variables
@@ -31,45 +29,51 @@ export default async function handler(
     return res.status(500).json({ error: "Server misconfigured" });
   }
 
+  const livekitHost = wsUrl.replace("wss://", "https://");
+  const roomServiceClient = new RoomServiceClient(
+    livekitHost,
+    apiKey,
+    apiSecret
+  );
+
   try {
-    const livekitHost = wsUrl.replace("wss://", "https://");
-    const roomServiceClient = new RoomServiceClient(
-      livekitHost,
-      apiKey,
-      apiSecret
-    );
     const rooms = await roomServiceClient.listRooms();
     const room = rooms.find((room) => room.name === roomId);
+    
     if (room) {
-      const participants = await roomServiceClient.listParticipants(
-        roomId as string
-      );
+      const participants = await roomServiceClient.listParticipants(roomId);
 
-      // Check if username already exists in the room
-      // if (participants.some((participant) => participant.name === username)) {
-      //   return res
-      //     .status(500)
-      //     .json({ error: "Username already exists in the room" });
-      // }
-      // console.log("Current participants in room:", participants);
+      if (participants.some((participant) => participant.name === username)) {
+        console.log("Username already exists in the room", username);
+        return res
+          .status(409)
+          .json({ error: "Username already exists in the room" });
+      }
+    } else {
+      console.log("Room does not exist, creating it", roomId, topic);
+      await roomServiceClient.createRoom({
+        name: roomId,
+        metadata: JSON.stringify(topic),  // Stringify the topic object
+      });
     }
   } catch (error) {
-    console.error("Error listing participants:", error);
+    console.error("Error checking room participants:", error);
+    return res.status(500).json({ error: "Failed to verify username availability" });
   }
 
   try {
     const accessToken = new AccessToken(apiKey, apiSecret, {
-      identity: username as string,
-      name: username as string,
+      identity: username,
+      name: username,
     });
 
     accessToken.addGrant({
-      room: roomId as string,
+      room: roomId,
       roomJoin: true,
       canPublish: true,
       canSubscribe: true,
     });
-    console.log("Token generated successfully");
+
     return res.status(200).json({ token: await accessToken.toJwt() });
   } catch (error) {
     console.error("Error generating token:", error);

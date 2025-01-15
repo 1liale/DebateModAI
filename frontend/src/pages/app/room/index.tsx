@@ -14,11 +14,17 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { Video, VideoOff, Mic, MicOff } from "lucide-react";
 import { useRoom } from '@/components/providers/RoomProvider';
+import { useToast } from "@/hooks/use-toast";
+import { PrimaryButton, SecondaryButton } from "@/components/base/Buttons";
+import { 
+  TypographyH2, 
+  TypographyLead 
+} from "@/components/base/Typography";
 
 // Interfaces
 interface DeviceState {
@@ -48,6 +54,17 @@ interface RoomDetailsFormProps {
   setRoomId: (value: string) => void;
   setUsername: (value: string) => void;
   onJoin: (roomId: string, username: string) => void;
+}
+
+enum FormMode {
+  SELECT,
+  SELF_PRACTICE,
+  JOIN_EXISTING
+}
+
+type FormView = {
+  mode: FormMode;
+  setMode: (mode: FormMode) => void;
 }
 
 const PrejoinScreen: React.FC<PrejoinScreenProps> = ({ onJoin }) => {
@@ -269,8 +286,8 @@ const PrejoinScreen: React.FC<PrejoinScreenProps> = ({ onJoin }) => {
 
       <RoomDetailsForm
         roomId={roomId}
-        setRoomId={setRoomId}
         username={username}
+        setRoomId={setRoomId}
         setUsername={setUsername}
         onJoin={onJoin}
       />
@@ -369,54 +386,202 @@ const RoomDetailsForm: React.FC<RoomDetailsFormProps> = ({
   setUsername,
   onJoin,
 }) => {
+  const [mode, setMode] = useState<FormMode>(FormMode.SELECT);
+  const [topic, setTopic] = useState<string>("");
+  const { toast } = useToast();
+
+  const handleJoinRoom = async () => {
+    if (mode === FormMode.JOIN_EXISTING) {
+      try {
+        const response = await fetch('/api/livekit/room-setup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            roomId,
+            username,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+
+        onJoin(roomId, username);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Room not found or username already taken",
+        });
+      }
+    } else {
+      // Self-practice mode
+      const practiceRoomId = `practice-${Date.now()}`;
+      try {
+        await fetch('/api/livekit/room-setup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            roomId: practiceRoomId,
+            username,
+            topic: { motion: topic, "against-motion": "No motion" }
+          }),
+        });
+
+        onJoin(practiceRoomId, username);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create practice room",
+        });
+      }
+    }
+  };
+
+  if (mode === FormMode.SELECT) {
+    return (
+      <div className="flex-1 flex items-center p-8 md:p-12">
+        <div className="w-full space-y-8">
+          <div className="space-y-2">
+            <TypographyH2>Choose Your Mode</TypographyH2>
+            <TypographyLead>
+              Join an existing debate room or practice by yourself 😎
+            </TypographyLead>
+          </div>
+
+          <div className="space-y-6">
+            
+            <PrimaryButton
+              className="w-full text-lg py-6"
+              variant="outline"
+              onClick={() => setMode(FormMode.JOIN_EXISTING)}
+            >
+              Join Existing Debate
+            </PrimaryButton>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
+              </div>
+            </div>
+
+            <SecondaryButton
+              className="w-full text-lg py-6"
+              variant="outline"
+              onClick={() => setMode(FormMode.SELF_PRACTICE)}
+            >
+              Self Practice
+            </SecondaryButton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex-1 flex items-center p-8 md:p-12">
+    <div className="flex-1 flex items-center p-8 md:p-10">
       <div className="w-full space-y-8">
         <div className="space-y-2">
-          <h2 className="text-3xl font-semibold">Room Details</h2>
-          <p className="text-lg text-muted-foreground">
-            Enter your details to join the room
-          </p>
+          <TypographyH2>
+            {mode === FormMode.SELF_PRACTICE 
+              ? "Practice With AI" 
+              : "Join Ongoing Debate"}
+          </TypographyH2>
+          <TypographyLead>
+            {mode === FormMode.SELF_PRACTICE 
+              ? "Defeat our AI agent to prove your worth"
+              : "Debate your peers with AI feedback"}
+          </TypographyLead>
         </div>
 
         <div className="space-y-6">
-          <div className="space-y-3">
-            <Label htmlFor="roomId" className="text-lg">
-              Room ID
-            </Label>
-            <Input
-              id="roomId"
-              placeholder="Enter room ID"
-              value={roomId}
-              onChange={(e) => setRoomId(e.target.value)}
-              className="text-lg py-6"
-            />
-          </div>
+          {mode === FormMode.SELF_PRACTICE ? (
+            <>
+              <div className="space-y-3">
+                  <Label htmlFor="topic" className="text-lg">
+                    Debate Topic
+                  </Label>
+                  <Input
+                    id="topic"
+                    placeholder="Enter debate topic"
+                    value={topic}
+                    onChange={(e) => setTopic(e.target.value)}
+                    className="text-lg py-6"
+                  />
+                </div>
+              <div className="space-y-3">
+                <Label htmlFor="username" className="text-lg">
+                  Your Name
+                </Label>
+                <Input
+                  id="username"
+                  placeholder="Enter your name"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="text-lg py-6"
+                />
+              </div>
+              
+            </>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <Label htmlFor="roomId" className="text-lg">
+                  Room ID
+                </Label>
+                <Input
+                  id="roomId"
+                  placeholder="Enter room ID"
+                  value={roomId}
+                  onChange={(e) => setRoomId(e.target.value)}
+                  className="text-lg py-6"
+                />
+              </div>
+              <div className="space-y-3">
+                <Label htmlFor="username" className="text-lg">
+                  Your Name
+                </Label>
+                <Input
+                  id="username"
+                  placeholder="Enter your name"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="text-lg py-6"
+                />
+              </div>
+            </>
+          )}
 
-          <div className="space-y-3">
-            <Label htmlFor="username" className="text-lg">
-              Your Name
-            </Label>
-            <Input
-              id="username"
-              placeholder="Enter your name"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="text-lg py-6"
-            />
-          </div>
-
-          <Button
-            className="w-full text-lg py-6"
-            onClick={() => {
-              if (roomId && username) {
-                onJoin(roomId, username);
+          <div className="flex gap-4">
+            <Button
+              variant="outline"
+              className="flex-1 text-lg py-6"
+              onClick={() => setMode(FormMode.SELECT)}
+            >
+              Back
+            </Button>
+            <Button
+              className="flex-1 text-lg py-6"
+              onClick={handleJoinRoom}
+              disabled={
+                mode === FormMode.SELF_PRACTICE
+                  ? !username || !topic
+                  : !roomId || !username
               }
-            }}
-            disabled={!roomId || !username}
-          >
-            Join Room
-          </Button>
+            >
+              Join
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -454,7 +619,7 @@ const Page = () => {
   useEffect(() => {
     // If user has an active room, redirect them there
     if (mounted && activeRoom && activeUsername) {
-      router.push(`/app/room/${activeRoom}?username=${encodeURIComponent(activeUsername)}`);
+      router.push(`/app/room/${activeRoom}`);
     }
   }, [mounted, activeRoom, activeUsername, router]);
 
@@ -475,7 +640,7 @@ const Page = () => {
         onJoin={(room: string, name: string) => {
           setActiveRoom(room);
           setActiveUsername(name);
-          router.push(`/app/room/${room}?username=${encodeURIComponent(name)}`);
+          router.push(`/app/room/${room}`);
         }}
       />
     </main>

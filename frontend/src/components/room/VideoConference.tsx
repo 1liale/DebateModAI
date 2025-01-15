@@ -2,7 +2,6 @@ import {
   GridLayout,
   ParticipantTile,
   useTracks,
-  FocusLayout
 } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";

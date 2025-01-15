@@ -56,9 +56,18 @@ async def entrypoint(ctx: JobContext):
         if msg.message:
             asyncio.create_task(answer_from_text(msg.message))
 
+    logger.info(f"Debate topic: {ctx.room}")
     await agent.say(
-        "Welcome to the debate. Let's begin by discussing social media's impact on youth development.", allow_interruptions=False
+        f"Welcome to your freestyle debate practice session. I will be your debate partner. The topic for today is {ctx.room.metadata}. To start the debate, select your side and click the 'Start' button below.", allow_interruptions=False
     )
+
+    @ctx.room.on("participant_disconnected")
+    async def on_participant_disconnected(participant):
+        # Check if there are any human participants left
+        human_participants = [p for p in ctx.room.participants.values() if not p.is_agent]
+        if not human_participants:
+            logger.info("All human participants have left, closing room")
+            await ctx.room.close()
 
 
 if __name__ == "__main__":

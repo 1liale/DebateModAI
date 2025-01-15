@@ -1,7 +1,7 @@
 import {
   ControlBar,
   LiveKitRoom,
-  RoomAudioRenderer,
+  RoomAudioRenderer
 } from '@livekit/components-react';
 import '@livekit/components-styles';
 import { useRouter } from 'next/router';
@@ -15,24 +15,51 @@ import { VideoConference } from '@/components/room/VideoConference';
 import { TypographyP } from '@/components/base/Typography';
 import { Chat } from '@/components/room/Chat';
 import { SimpleVoiceAssistant } from '@/components/room/SimpleVoiceAssistant';
+import { firestore_db as db } from '@/config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Page = () => {
   const router = useRouter();
-  const { setActiveRoom, setActiveUsername } = useRoom();
-  const { room_id, username } = router.query;
+  const { activeRoom, activeUsername, setActiveRoom, setActiveUsername } = useRoom();
+  const { room_id } = router.query as { room_id: string };
   const [token, setToken] = useState(null);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [topic, setTopic] = useState<string>("");
 
   useEffect(() => {
     const getToken = async () => {
+      // Ensure we have both room_id and username from context
+      if (!room_id || !activeUsername) {
+        setError("Missing room ID or username");
+        setOpen(true);
+        return;
+      }
+
       try {
-        // First get the participant token
-        const tokenResp = await fetch(`/api/livekit/get-token?room=${room_id}&username=${username}`);
+        const topicDoc = await getDoc(doc(db, 'topics', room_id));
+        const currentTopic = topicDoc.exists() ? topicDoc.data() : null;
+        
+        setTopic(currentTopic?.motion || "");
+        
+        const tokenResp = await fetch('/api/livekit/room-setup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            roomId: room_id,
+            username: activeUsername,
+            topic: currentTopic
+          }),
+        });
+        
         const result = await tokenResp.json();
+        
         if (!tokenResp.ok) {
           throw new Error(result.error);
         }
+        
         setToken(result.token);      
       } catch (e) {
         setError((e as Error).message);
@@ -40,12 +67,11 @@ const Page = () => {
       }
     };
 
-    if (room_id && username) {
+    if (room_id) {
       setActiveRoom(room_id as string);
-      setActiveUsername(username as string);
       getToken();
     }
-  }, [room_id, username]);
+  }, [room_id, activeUsername]);
 
   const handleDisconnect = async () => {
     try {
@@ -104,7 +130,7 @@ const Page = () => {
         <div className="flex-1 bg-background flex flex-col min-h-0">
           <div className="p-2 flex-shrink-0">
             <Banner>
-              THB social media has done more harm than good to the development of youth in the country.
+              {topic}
             </Banner>
           </div>
           
@@ -112,11 +138,11 @@ const Page = () => {
             <SimpleVoiceAssistant />
             <VideoConference />
             <RoomAudioRenderer />
-            <ControlBar />
+            <ControlBar/>
           </div>
         </div>
         <div className="w-80 h-full border-l border-border">
-          <Chat roomId={room_id as string} username={username as string} />
+          <Chat roomId={room_id as string} username={activeUsername as string} />
         </div>
         
       </div>

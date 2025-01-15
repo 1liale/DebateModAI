@@ -7,6 +7,7 @@ import Link from "next/link";
 import { formatDate } from '@/utils/date';
 import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/base/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ChatMessage } from '@/server/resolver/chat';
 // Base color configurations
 export const cardColors = {
   blue: {
@@ -393,5 +394,35 @@ export function BlogCard({
         </CardContent>
       </Card>
     </Link>
+  );
+}
+
+interface ChatCardProps {
+  message: ChatMessage; 
+  isOwnMessage: boolean;
+}
+
+export function ChatCard({ message, isOwnMessage }: ChatCardProps) {
+
+  return (
+    <Card
+      className={cn(
+        "mb-4 max-w-[75%] shadow-sm rounded-lg border",
+        isOwnMessage ? (
+          "ml-auto bg-primary"
+        ) : (
+          "bg-card border-border/50 dark:bg-card/50"
+        )
+      )}
+    >
+      <CardContent className="p-2">
+        <TypographySmall className="font-medium mb-1">
+          {message.username}
+        </TypographySmall>
+        <TypographyMuted>
+          {message.text}
+        </TypographyMuted>
+      </CardContent>
+    </Card>
   );
 }

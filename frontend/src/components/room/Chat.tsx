@@ -4,10 +4,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getMessages, sendMessage } from "@/server/resolver/chat";
+import { ref, query, orderByChild, onValue, off } from "firebase/database";
+import { realtime_db as realtimeDb, firebase_auth as auth } from "@/config/firebase";
+import { ChatCard } from "@/components/base/Cards";
 
 type ChatMessage = {
   id: string;
-  senderId: string;
+  user_id: string;
+  username: string;
   text: string;
   timestamp: number;
 };
@@ -23,53 +28,37 @@ export const Chat = ({
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    // Initial load of messages
-    const loadMessages = async () => {
-      try {
-        const response = await fetch(
-          `/api/chat/messages?conversationId=${roomId}`
-        );
-        const data = await response.json();
-        console.log("DATA", data);
-        if (data) {
-          const messageArray = Object.entries(data).map(
-            ([id, msg]: [string, any]) => ({
-              id,
-              ...msg,
-            })
-          );
-          setMessages(messageArray);
-        }
-      } catch (error) {
-        console.error("Error loading messages:", error);
-        setMessages([]);
+    // Set up real-time listener
+    const messagesRef = ref(realtimeDb, `messages/${roomId}`);
+    const messagesQuery = query(messagesRef, orderByChild("timestamp"));
+    
+    onValue(messagesQuery, (snapshot) => {
+      if (snapshot.exists()) {
+        const messages: ChatMessage[] = [];
+        snapshot.forEach((childSnapshot) => {
+          messages.push({
+            id: childSnapshot.key!,
+            ...childSnapshot.val()
+          });
+        });
+        setMessages(messages);
       }
-    };
+    });
 
-    loadMessages();
+    // Cleanup listener on unmount
+    return () => {
+      off(messagesQuery);
+    };
   }, [roomId]);
 
-  const sendMessage = async () => {
+  const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
     try {
-      const response = await fetch(
-        `/api/chat/messages?conversationId=${roomId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            senderId: username,
-            text: newMessage,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
+      await sendMessage(roomId, {
+        username: username,
+        text: newMessage.trim(),
+      });
 
       setNewMessage("");
     } catch (error) {
@@ -78,40 +67,33 @@ export const Chat = ({
   };
 
   return (
-      <div className="h-full flex flex-col bg-background">
-        <div className="p-4 border-b border-border">
-          <TypographyLarge className="font-semibold text-foreground">
-            Chat
-          </TypographyLarge>
-        </div>
-
-        <ScrollArea className="flex-1 p-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                "mb-4 max-w-[80%] rounded-lg p-2",
-                message.senderId === username
-                  ? "ml-auto bg-primary text-primary-foreground"
-                  : "bg-[hsl(var(--chat-bg))] text-foreground"
-              )}
-            >
-              <div className="text-sm font-medium">{message.senderId}</div>
-              <div className="text-sm">{message.text}</div>
-            </div>
-          ))}
-        </ScrollArea>
-
-        <div className="p-4 border-t border-border flex gap-2 bg-[hsl(var(--chat-input))]">
-          <Input
-            className="bg-background/50 border-border/50 text-foreground"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-          <Button onClick={sendMessage}>Send</Button>
-        </div>
+    <div className="h-full flex flex-col bg-background">
+      <div className="p-4 border-b border-border">
+        <TypographyLarge className="font-semibold text-foreground">
+          Chat
+        </TypographyLarge>
       </div>
+
+      <ScrollArea className="flex-1 p-4">
+        {messages.map((message) => (
+          <ChatCard
+            key={message.id}
+            message={message}
+            isOwnMessage={message.username === username}
+          />
+        ))}
+      </ScrollArea>
+
+      <div className="p-4 border-t border-border flex gap-2 bg-[hsl(var(--chat-input))]">
+        <Input
+          className="bg-background/50 border-border/50 text-foreground"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type a message..."
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+        />
+        <Button onClick={handleSendMessage}>Send</Button>
+      </div>
+    </div>
   );
 };
