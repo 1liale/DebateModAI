@@ -8,6 +8,7 @@ import {
   UserCog,
   MessageCircle,
   BookOpen,
+  Sparkle
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -30,7 +31,9 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: Home, url: "/app/dashboard" },
   { title: "Room", icon: Phone, url: "/app/room" },
-  { title: "Debate Topics", icon: MessageSquare, url: "/app/topics" },
+  { section: "Topics" },
+  { title: "Generate a New Topic", icon: Sparkle, url: "/app/topics/generate" },
+  { title: "Community Topics", icon: MessageSquare, url: "/app/topics/community" },
   { section: "Participants" },
   { title: "Learners", icon: Users, url: "/app/learners" },
   { title: "Instructors", icon: UserCog, url: "/app/instructors" },
