@@ -166,34 +166,47 @@ export function StatCard({
 // Topic Card Component
 interface TopicCardProps {
   title: string;
+  description: string;
+  metadata?: string;
+  difficulty: string;
   category: string;
-  engagement: string;
-  image: string;
+  roomIds?: string[];
+  slug?: string;
+  image?: string;
+  engagement?: string;
 }
 
 export function TopicCard({
   title,
+  description,
+  difficulty,
   category,
-  engagement,
   image,
+  engagement,
 }: TopicCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all">
-      <div className="relative h-32 w-full">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
+      {image && (
+        <div className="relative h-32 w-full">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      )}
       <CardContent className="p-3">
         <h4 className="font-semibold text-sm mb-2">{title}</h4>
-        <Badge variant="secondary" className="mb-2">
-          {category}
-        </Badge>
-        <p className="text-sm text-muted-foreground">{engagement}</p>
+        <div className="flex gap-2 mb-2">
+          <Badge variant="secondary">{category}</Badge>
+          <Badge variant="outline">{difficulty}</Badge>
+        </div>
+        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{description}</p>
+        {engagement && (
+          <p className="text-sm text-muted-foreground">{engagement}</p>
+        )}
       </CardContent>
     </Card>
   );

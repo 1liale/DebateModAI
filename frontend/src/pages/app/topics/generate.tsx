@@ -13,9 +13,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface TopicFormData {
   title: string;
   description: string;
-  category: string;
+  metadata: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  tags: string[];
+  category: string;
+  roomIds: string[];
+  slug: string;
+  tags?: string[];
 }
 
 // Example prompt suggestions - these could come from an API
@@ -47,13 +50,21 @@ export default function Page() {
   const [formData, setFormData] = useState<TopicFormData>({
     title: "",
     description: "",
-    category: "",
+    metadata: "",
     difficulty: "Beginner",
+    category: "",
+    roomIds: [],
+    slug: "",
     tags: [],
   });
 
   const handleCreateTopic = async () => {
     try {
+      const slug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
       const response = await fetch('/api/topics/create', {
         method: 'POST',
         headers: {
@@ -61,6 +72,7 @@ export default function Page() {
         },
         body: JSON.stringify({
           ...formData,
+          slug,
           createdBy: user?.id,
         }),
       });
@@ -73,8 +85,11 @@ export default function Page() {
       setFormData({
         title: "",
         description: "",
-        category: "",
+        metadata: "User Generated",
         difficulty: "Beginner",
+        category: "",
+        roomIds: [],
+        slug: "",
         tags: [],
       });
     } catch (error) {
@@ -215,6 +230,7 @@ export default function Page() {
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter a clear, concise title"
               />
             </div>
             <div className="grid gap-2">
@@ -223,15 +239,35 @@ export default function Page() {
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Provide a detailed description of the debate topic"
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="category">Category</Label>
-              <Input
+              <select
                 id="category"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-              />
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2"
+              >
+                <option value="">Select a category</option>
+                <option value="Politics">Politics</option>
+                <option value="Technology">Technology</option>
+                <option value="Environment">Environment</option>
+                <option value="Economics">Economics</option>
+                <option value="Social Issues">Social Issues</option>
+                <option value="Education">Education</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="International Relations">International Relations</option>
+                <option value="Science">Science</option>
+                <option value="Ethics">Ethics</option>
+                <option value="Law">Law</option>
+                <option value="Culture">Culture</option>
+                <option value="Media">Media</option>
+                <option value="Philosophy">Philosophy</option>
+                <option value="Sports">Sports</option>
+                <option value="Business">Business</option>
+              </select>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="difficulty">Difficulty</Label>
@@ -249,7 +285,33 @@ export default function Page() {
                 <option value="Advanced">Advanced</option>
               </select>
             </div>
-            <Button onClick={handleCreateTopic}>Create Topic</Button>
+            <div className="grid gap-2">
+              <Label htmlFor="metadata">Metadata (optional)</Label>
+              <Input
+                id="metadata"
+                value={formData.metadata}
+                onChange={(e) => setFormData(prev => ({ ...prev, metadata: e.target.value }))}
+                placeholder="e.g., User Generated, Community, Research Paper"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="tags">Tags (comma-separated)</Label>
+              <Input
+                id="tags"
+                value={formData.tags?.join(', ') || ''}
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
+                }))}
+                placeholder="e.g., current events, ethics, society"
+              />
+            </div>
+            <Button 
+              onClick={handleCreateTopic}
+              disabled={!formData.title || !formData.description || !formData.category || !formData.difficulty}
+            >
+              Create Topic
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

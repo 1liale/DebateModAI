@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { TypographyH1, TypographyH2, TypographyMuted } from "@/components/base/Typography";
+import { TypographyH1, TypographyMuted } from "@/components/base/Typography";
 import { TopicCard } from "@/components/base/Cards";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { UserRoundPen } from "lucide-react";
 import Fuse from 'fuse.js';
 
 // Example community topics data structure
@@ -15,40 +10,43 @@ const communityTopics = [
   {
     id: "1",
     title: "Universal Basic Income Implementation",
+    description: "Explore the economic and social implications of implementing UBI",
+    metadata: "Created by Community",
+    difficulty: "Intermediate",
     category: "Economics",
-    engagement: "324 debates",
+    roomIds: [],
+    slug: "universal-basic-income",
     image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e",
+    engagement: "324 debates"
   },
   {
     id: "2",
     title: "Artificial Intelligence Regulation",
+    description: "Discuss the balance between AI innovation and safety regulations",
+    metadata: "Trending Topic",
+    difficulty: "Advanced",
     category: "Technology",
-    engagement: "156 debates",
+    roomIds: [],
+    slug: "ai-regulation",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+    engagement: "156 debates"
   },
   // Add more topics...
 ];
 
-interface CreateTopicFormData {
+type Topic = {
   title: string;
   description: string;
+  metadata: string;
+  difficulty: string;
   category: string;
   roomIds: string[];
   slug: string;
 }
 
 export default function Page() {
-  const { user } = useUser();
   const [topics, setTopics] = useState(communityTopics);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState<CreateTopicFormData>({
-    title: "",
-    description: "",
-    category: "",
-    roomIds: [""],
-    slug: "",
-  });
 
   // Initialize Fuse instance
   const fuse = new Fuse(topics, {
@@ -61,43 +59,6 @@ export default function Page() {
   const filteredTopics = searchQuery
     ? fuse.search(searchQuery).map(result => result.item)
     : topics;
-
-  const handleAddRoomId = () => {
-    setFormData(prev => ({
-      ...prev,
-      roomIds: [...prev.roomIds, ""]
-    }));
-  };
-
-  const handleRoomIdChange = (index: number, value: string) => {
-    const newRoomIds = [...formData.roomIds];
-    newRoomIds[index] = value;
-    setFormData(prev => ({
-      ...prev,
-      roomIds: newRoomIds
-    }));
-  };
-
-  const handleCreateTopic = async () => {
-    // Here you would typically make an API call to create the topic
-    const newTopic = {
-      id: Date.now().toString(),
-      title: formData.title,
-      category: formData.category,
-      engagement: "0 debates",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995", // Default image
-    };
-
-    setTopics(prev => [...prev, newTopic]);
-    setIsDialogOpen(false);
-    setFormData({
-      title: "",
-      description: "",
-      category: "",
-      roomIds: [""],
-      slug: "",
-    });
-  };
 
   return (
     <div className="h-full w-full">
