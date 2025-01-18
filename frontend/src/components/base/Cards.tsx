@@ -179,7 +179,6 @@ interface TopicCardProps {
 export function TopicCard({
   title,
   description,
-  difficulty,
   category,
   image,
   engagement,
@@ -201,7 +200,6 @@ export function TopicCard({
         <h4 className="font-semibold text-sm mb-2">{title}</h4>
         <div className="flex gap-2 mb-2">
           <Badge variant="secondary">{category}</Badge>
-          <Badge variant="outline">{difficulty}</Badge>
         </div>
         <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{description}</p>
         {engagement && (

@@ -18,7 +18,6 @@ interface TopicFormData {
   category: string;
   roomIds: string[];
   slug: string;
-  tags?: string[];
 }
 
 // Example prompt suggestions - these could come from an API
@@ -55,8 +54,19 @@ export default function Page() {
     category: "",
     roomIds: [],
     slug: "",
-    tags: [],
   });
+
+  const clearFormData = () => {
+    setFormData({
+      title: "",
+      description: "",
+      metadata: "User Generated",
+      difficulty: "Beginner",
+      category: "",
+      roomIds: [],
+      slug: "",
+    });
+  }
 
   const handleCreateTopic = async () => {
     try {
@@ -80,30 +90,49 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Failed to create topic');
       }
-
+      clearFormData()
       setIsDialogOpen(false);
-      setFormData({
-        title: "",
-        description: "",
-        metadata: "User Generated",
-        difficulty: "Beginner",
-        category: "",
-        roomIds: [],
-        slug: "",
-        tags: [],
-      });
     } catch (error) {
       console.error('Error creating topic:', error);
     }
   };
 
+  
+
   const handleSubmitPrompt = async () => {
-    setIsDialogOpen(true);
-    setFormData(prev => ({
-      ...prev,
-      title: userInput,
-      description: userInput,
-    }));
+    try {
+      setIsGenerating(true);
+      
+      const response = await fetch('/api/generate-topic', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: userInput
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate topic');
+      }
+  
+      const data = await response.json();
+      
+      // Parse the AI response and map it to our TopicFormData structure
+      const topicData: TopicFormData = {
+        ...data,
+        roomIds: [],
+      };
+  
+      setFormData(topicData);
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error('Error generating topic:', error);
+      // You might want to show an error toast here
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const refreshPrompts = () => {
@@ -165,7 +194,7 @@ export default function Page() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsDialogOpen(true)}
+              onClick={() => { clearFormData(); setIsDialogOpen(true) }}
               className="gap-2"
             >
               <UserRoundPen className="h-4 w-4 text-muted-foreground" />
@@ -205,10 +234,14 @@ export default function Page() {
                   </div>
                   <Button 
                     size="sm" 
-                    disabled={!userInput.trim()} 
+                    disabled={!userInput.trim() || isGenerating} 
                     onClick={handleSubmitPrompt}
                   >
-                    <Send className="h-4 w-4" />
+                    {isGenerating ? (
+                      <RefreshCcw className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -236,6 +269,7 @@ export default function Page() {
             <div className="grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
+                className="resize-none"
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -292,18 +326,6 @@ export default function Page() {
                 value={formData.metadata}
                 onChange={(e) => setFormData(prev => ({ ...prev, metadata: e.target.value }))}
                 placeholder="e.g., User Generated, Community, Research Paper"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="tags">Tags (comma-separated)</Label>
-              <Input
-                id="tags"
-                value={formData.tags?.join(', ') || ''}
-                onChange={(e) => setFormData(prev => ({ 
-                  ...prev, 
-                  tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)
-                }))}
-                placeholder="e.g., current events, ethics, society"
               />
             </div>
             <Button 
