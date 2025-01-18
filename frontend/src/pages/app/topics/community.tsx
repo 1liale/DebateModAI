@@ -3,33 +3,35 @@ import { useUser } from "@clerk/nextjs";
 import { TypographyH1, TypographyMuted } from "@/components/base/Typography";
 import { TopicCard } from "@/components/base/Cards";
 import { Input } from "@/components/ui/input";
-import Fuse from 'fuse.js';
+import Fuse from "fuse.js";
 
 // Example community topics data structure
 const communityTopics = [
   {
     id: "1",
     title: "Universal Basic Income Implementation",
-    description: "Explore the economic and social implications of implementing UBI",
+    description:
+      "Explore the economic and social implications of implementing UBI",
     metadata: "Created by Community",
     difficulty: "Intermediate",
     category: "Economics",
     roomIds: [],
     slug: "universal-basic-income",
     image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e",
-    engagement: "324 debates"
+    engagement: "324 debates",
   },
   {
     id: "2",
     title: "Artificial Intelligence Regulation",
-    description: "Discuss the balance between AI innovation and safety regulations",
+    description:
+      "Discuss the balance between AI innovation and safety regulations",
     metadata: "Trending Topic",
     difficulty: "Advanced",
     category: "Technology",
     roomIds: [],
     slug: "ai-regulation",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-    engagement: "156 debates"
+    engagement: "156 debates",
   },
   // Add more topics...
 ];
@@ -42,22 +44,22 @@ type Topic = {
   category: string;
   roomIds: string[];
   slug: string;
-}
+};
 
 export default function Page() {
   const [topics, setTopics] = useState(communityTopics);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Initialize Fuse instance
   const fuse = new Fuse(topics, {
-    keys: ['title', 'category'],
+    keys: ["title", "category"],
     threshold: 0.3,
-    includeScore: true
+    includeScore: true,
   });
 
   // Get filtered topics based on search query
   const filteredTopics = searchQuery
-    ? fuse.search(searchQuery).map(result => result.item)
+    ? fuse.search(searchQuery).map((result) => result.item)
     : topics;
 
   return (
@@ -94,6 +96,8 @@ export default function Page() {
                 category={topic.category}
                 engagement={topic.engagement}
                 image={topic.image}
+                description={""}
+                difficulty={""}
               />
             ))}
           </div>

@@ -162,7 +162,7 @@ const DebateTopicsCarousel = () => {
           </div>
           <PrimaryCarousel itemCount={topics.trending.length}>
             {topics.trending.map((topic, index) => (
-              <TopicCard key={index} {...topic} />
+              <TopicCard description={""} difficulty={""} key={index} {...topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>
@@ -177,7 +177,7 @@ const DebateTopicsCarousel = () => {
           </div>
           <PrimaryCarousel itemCount={topics.favorites.length}>
             {topics.favorites.map((topic, index) => (
-              <TopicCard key={index} {...topic} />
+              <TopicCard description={""} difficulty={""} key={index} {...topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>
@@ -192,7 +192,7 @@ const DebateTopicsCarousel = () => {
           </div>
           <PrimaryCarousel itemCount={topics.controversial.length}>
             {topics.controversial.map((topic, index) => (
-              <TopicCard key={index} {...topic} />
+              <TopicCard description={""} difficulty={""} key={index} {...topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>

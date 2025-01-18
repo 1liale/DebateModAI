@@ -62,6 +62,6 @@ export default async function handler(
     res.status(200).json(parsedSuggestion);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ message: "Error generating topic", error: error.message });
+    res.status(500).json({ message: "Error generating topic" });
   }
 }

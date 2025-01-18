@@ -166,9 +166,9 @@ export function StatCard({
 // Topic Card Component
 interface TopicCardProps {
   title: string;
-  description: string;
+  description?: string;
   metadata?: string;
-  difficulty: string;
+  difficulty?: string;
   category: string;
   roomIds?: string[];
   slug?: string;
