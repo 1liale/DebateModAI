@@ -427,7 +427,6 @@ const RoomDetailsForm: React.FC<RoomDetailsFormProps> = ({
           },
           body: JSON.stringify({
             roomId: practiceRoomId,
-            username,
             topic: { motion: topic, "against-motion": "No motion" }
           }),
         });
