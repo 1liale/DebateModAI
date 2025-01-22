@@ -69,6 +69,13 @@ export const UnauthHeader = () => {
             <LinkButton href="/#how-it-works">About</LinkButton>
             <LinkButton href="/#benefits">Features</LinkButton>
             <LinkButton href="/faq">FAQ</LinkButton>
+            <LinkButton
+              href="https://donate.stripe.com/28o6ot2G00QZgQU8ww"
+              rel="noopener noreferrer"
+              className="hover:text-brand/90"
+            >
+              Support Us! ❤️
+            </LinkButton>
             <SignedIn>
               {!pathname.startsWith("/app") && (
                 <LinkButton href="/app/dashboard" variant="outline">
