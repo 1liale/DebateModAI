@@ -7,7 +7,8 @@ import {
   Users,
   MessageCircle,
   BookOpen,
-  Sparkle
+  Sparkle,
+  Heart
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -101,7 +102,7 @@ export const SideBar = () => {
           </Link>
         </div>
 
-        <div className="flex-1 p-1.5 flex flex-col justify-start gap-1">
+        <div className="flex-1 p-1.5 flex flex-col justify-start gap-0.5">
           {menuItems.map((item, index) => (
             <div key={index}>
               {isOpen && item.section && (
@@ -146,7 +147,7 @@ export const SideBar = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="p-1.5 border-t border-sidebar-border">
+        <div className="p-1.5 border-t border-sidebar-border flex flex-col gap-0.5">
           <div className="w-full">
             {isOpen ? (
               <ThemeSwitch />
@@ -156,6 +157,19 @@ export const SideBar = () => {
               </div>
             )}
           </div>
+
+          <LinkButton
+              href="https://donate.stripe.com/28o6ot2G00QZgQU8ww"
+              rel="noopener noreferrer"
+              className="flex w-full justify-start gap-2.5 px-2.5 py-2 text-sidebar-text hover:bg-nav-hover rounded-lg hover:text-brand"
+            >
+            <Heart className="h-4 w-4" />
+            {isOpen && (
+              <span className="text-xs font-medium">
+                Support Us!
+              </span>
+            )}
+          </LinkButton>
 
           <LinkButton
             href="/faq"
