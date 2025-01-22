@@ -8,7 +8,6 @@ import {
 } from "@clerk/nextjs";
 import { ArrowUpRight } from "lucide-react";
 import { useTheme } from "next-themes";
-import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import {
   LinkButton,

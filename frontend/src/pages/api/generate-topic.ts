@@ -42,7 +42,7 @@ export default async function handler(
     let parsedSuggestion;
     try {
       parsedSuggestion = JSON.parse(suggestion);
-    } catch (error) {
+    } catch {
       throw new Error("Failed to parse the suggestion into TopicFormData format");
     }
 

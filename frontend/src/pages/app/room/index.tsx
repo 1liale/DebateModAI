@@ -404,7 +404,7 @@ const RoomDetailsForm: React.FC<RoomDetailsFormProps> = ({
         }
 
         onJoin(roomId, username);
-      } catch (error) {
+      } catch {
         toast({
           variant: "destructive",
           title: "Error",
@@ -427,7 +427,7 @@ const RoomDetailsForm: React.FC<RoomDetailsFormProps> = ({
         });
 
         onJoin(practiceRoomId, username);
-      } catch (error) {
+      } catch {
         toast({
           variant: "destructive",
           title: "Error",
