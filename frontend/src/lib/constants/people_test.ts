@@ -6,29 +6,44 @@ export const testUsers: User[] = [
         name: 'John Doe',
         username: 'john',
         email: 'john@example.com',
+        location: 'San Francisco, CA',
+        photoUrl: '/images/cat-idle1.png',
         role: 'instructor',
-        dateJoined: '2024-01-15',
         status: 'active',
-        avatarUrl: '/images/cat-idle1.png'
+        experience: 'advanced',
+        interests: ['programming', 'teaching', 'web development'],
+        onboardingComplete: true,
+        createdAt: new Date('2024-01-15'),
+        updatedAt: new Date('2024-01-15')
     },
     {
         id: '2',
         name: 'Jane Smith',
         username: 'jane',
         email: 'jane@example.com',
-        role: 'student',
-        dateJoined: '2024-02-01',
+        location: 'New York, NY',
+        photoUrl: '/images/cat-idle1.png',
+        role: 'learner',
         status: 'active',
-        avatarUrl: '/images/cat-idle1.png'
+        experience: 'intermediate',
+        interests: ['machine learning', 'data science'],
+        onboardingComplete: true,
+        createdAt: new Date('2024-02-01'),
+        updatedAt: new Date('2024-02-01')
     },
     {
         id: '3',
         name: 'Bob Wilson',
         username: 'bob',
         email: 'bob@example.com',
-        role: 'student',
-        dateJoined: '2024-02-15',
+        location: 'Chicago, IL',
+        photoUrl: '/images/cat-idle1.png',
+        role: 'learner',
         status: 'inactive',
-        avatarUrl: '/images/cat-idle1.png'
+        experience: 'beginner',
+        interests: ['web design', 'UI/UX'],
+        onboardingComplete: false,
+        createdAt: new Date('2024-02-15'),
+        updatedAt: new Date('2024-02-15')
     },
 ];

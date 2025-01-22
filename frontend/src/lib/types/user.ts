@@ -13,6 +13,6 @@ export interface User {
     experience: Experience;
     interests: string[]
     onboardingComplete: boolean;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 } 

@@ -7,6 +7,7 @@ import {
   DocumentData 
 } from 'firebase/firestore';
 import { firestore_db as db } from '@/config/firebase';
+import { User } from '@/lib/types/user';
 
 type UserInput = {
   displayName: string;
@@ -37,10 +38,18 @@ export async function createUser(userId: string, userData: UserInput) {
   }
 }
 
-export async function getUser(userId: string): Promise<DocumentData | null> {
+export async function getUser(userId: string): Promise<User | null> {
   try {
     const docSnap = await getDoc(doc(db, 'users', userId));
-    return docSnap.exists() ? docSnap.data() : null;
+    if (!docSnap.exists()) return null;
+    
+    const data = docSnap.data();
+    return {
+      ...data,
+      id: userId,
+      createdAt: data.createdAt.toDate(),
+      updatedAt: data.updatedAt.toDate()
+    } as User;
   } catch (error) {
     console.error("Error fetching user:", error);
     throw error;
