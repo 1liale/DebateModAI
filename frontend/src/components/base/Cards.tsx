@@ -446,7 +446,7 @@ export function UserCard({ user }: UserCardProps) {
     return (
         <BaseCard className="p-6 flex flex-col items-center">
             <Avatar className="h-16 w-16 mb-4">
-                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarImage src={user.photoUrl} alt={user.name} />
                 <AvatarFallback>
                     {user.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
