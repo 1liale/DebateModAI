@@ -21,8 +21,8 @@ import Image from "next/image";
 import logo from "@/public/images/logo.svg";
 import { ThemeButton } from "../misc/ThemeWidget";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
 import { TypographyLarge } from "@/components/base/Typography";
+import { PrimaryInput } from "@/components/base/Inputs";
 
 interface HeaderProps {
   children: ReactNode;
@@ -127,10 +127,10 @@ export const AuthHeader = () => {
           />
         </Link>
         <div className="flex-1 max-w-2xl relative">
-          <Input
+          <PrimaryInput
             type="text"
             placeholder="Search / Enter command"
-            className="bg-background/50 border-border/50 focus-visible:ring-brand/50 text-ellipsis h-9"
+            className="text-ellipsis h-9"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 text-muted-foreground pointer-events-none">
             <span className="text-xs hidden md:block">⌘ F</span>

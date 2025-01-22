@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TypographyH2, TypographyLarge } from "@/components/base/Typography";
+import { TypographyH1 } from "@/components/base/Typography";
 import {
   Flame,
   Trophy,
@@ -248,12 +248,10 @@ export default function DashboardPage() {
   return (
     <div className="flex-1 overflow-auto p-4">
       <div className="space-y-2 mb-8">
-        <TypographyH2>
-          Welcome back, {user?.firstName || "Debater"}!
-        </TypographyH2>
-        <TypographyLarge className="text-muted-foreground">
-          Track your journey to debate mastery
-        </TypographyLarge>
+        <TypographyH1 className="bg-gradient-to-r from-gray-800 to-purple-400 dark:from-purple-800 dark:to-blue-500/80 text-transparent bg-clip-text">
+          Dashboard
+        </TypographyH1>
+        
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">

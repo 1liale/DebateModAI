@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/lib/utils/date';
 import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/base/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChatMessage } from '@/server/resolver/chat';
@@ -85,7 +85,7 @@ export function CourseCard({
   const colors = cardColors[colorScheme];
 
   return (
-    <Card
+    <BaseCard
       className={cn(
         colors.background,
         colors.border,
@@ -127,7 +127,7 @@ export function CourseCard({
           {progress}% Complete
         </p>
       </CardContent>
-    </Card>
+    </BaseCard>
   );
 }
 
@@ -150,7 +150,7 @@ export function StatCard({
   const colors = cardColors[colorScheme];
 
   return (
-    <Card className={cn(colors.background, colors.border, "shadow-sm")}>
+    <BaseCard className={cn(colors.background, colors.border, "shadow-sm")}>
       <CardContent className="p-3">
         <div className={cn("flex items-center gap-2 mb-1", colors.icon.color)}>
           <Icon className="h-3.5 w-3.5" />
@@ -159,7 +159,7 @@ export function StatCard({
         <div className="text-xl font-bold">{value}</div>
         <div className="text-[0.7rem] text-muted-foreground">{subtitle}</div>
       </CardContent>
-    </Card>
+    </BaseCard>
   );
 }
 
@@ -184,7 +184,7 @@ export function TopicCard({
   engagement,
 }: TopicCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all">
+    <BaseCard className="overflow-hidden hover:shadow-lg transition-all">
       {image && (
         <div className="relative h-32 w-full">
           <Image
@@ -206,7 +206,7 @@ export function TopicCard({
           <p className="text-sm text-muted-foreground">{engagement}</p>
         )}
       </CardContent>
-    </Card>
+    </BaseCard>
   );
 }
 
@@ -233,7 +233,7 @@ export function BaseCard({
   return (
     <Card 
       className={cn(
-        "border border-gray-200 dark:border-gray-800",
+        "border border-gray-200 dark:border-gray-800 bg-background/50",
         variant === 'muted' && "bg-gray-50/50 dark:bg-gray-900/50 rounded-xl hover:shadow-md transition-all duration-200",
         className
       )} 
@@ -348,7 +348,7 @@ export function BlogCard({
 }: BlogCardProps) {
   return (
     <Link href={href}>
-      <Card className="border-[1.5px] group overflow-hidden border-background dark:border-background dark:shadow-none shadow-none hover:shadow-lg dark:hover:border-gray-50/50 dark:border-gray-50/10 transition-all">
+      <BaseCard className="border-[1.5px] group overflow-hidden border-background dark:border-background dark:shadow-none shadow-none hover:shadow-lg dark:hover:border-gray-50/50 dark:border-gray-50/10 transition-all">
         <CardContent className={cn(
           "p-2 bg-background h-full",
           variant === 'horizontal' && "flex gap-4"
@@ -403,7 +403,7 @@ export function BlogCard({
             </div>
           </div>
         </CardContent>
-      </Card>
+      </BaseCard>
     </Link>
   );
 }
@@ -414,11 +414,10 @@ interface ChatCardProps {
 }
 
 export function ChatCard({ message, isOwnMessage }: ChatCardProps) {
-
   return (
-    <Card
+    <BaseCard
       className={cn(
-        "mb-4 max-w-[75%] shadow-sm rounded-lg border",
+        "mb-4 max-w-[75%] shadow-sm rounded-lg",
         isOwnMessage ? (
           "ml-auto bg-primary"
         ) : (
@@ -434,6 +433,6 @@ export function ChatCard({ message, isOwnMessage }: ChatCardProps) {
           {message.text}
         </TypographyMuted>
       </CardContent>
-    </Card>
+    </BaseCard>
   );
 }

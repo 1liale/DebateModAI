@@ -1,4 +1,4 @@
-import { formatDate } from '@/utils/date';
+import { formatDate } from '@/lib/utils/date';
 import { getPostBySlug } from "@/server/resolver/blog";
 import {
   TypographyH1,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Clock, User } from "lucide-react";
 import { GetServerSideProps } from "next";
-import { postRenderer } from "@/utils/post-renderer";
+import { postRenderer } from "@/lib/utils/post-renderer";
 
 interface Block {
   type: string;

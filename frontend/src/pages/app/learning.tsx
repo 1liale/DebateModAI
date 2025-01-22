@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { TypographyH2 } from "@/components/base/Typography";
 import { getAllPosts } from "@/server/resolver/blog";
 import { getStrapiMedia } from "@/server/resolver/blog";
-import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 import { BlogCard } from "@/components/base/Cards";
 import { BlogSearch } from "@/components/blog/Search";
@@ -22,21 +21,10 @@ interface LearningPageProps {
   initialMeta: Meta;
 }
 
-const categories = [
-  "All Categories",
-  "Videos",
-  "Articles",
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-];
-
 // Modify component to accept props
 export default function LearningPage({
   initialPosts: posts,
-  initialMeta,
 }: LearningPageProps) {
-  const [meta, setMeta] = useState<Meta>(initialMeta);
   const [filteredPosts, setFilteredPosts] = useState<any[]>(posts);
   const [showSearchResults, setShowSearchResults] = useState(false);
 

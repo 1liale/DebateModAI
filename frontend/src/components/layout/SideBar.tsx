@@ -5,7 +5,6 @@ import {
   Phone,
   MessageSquare,
   Users,
-  UserCog,
   MessageCircle,
   BookOpen,
   Sparkle
@@ -31,12 +30,10 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { title: "Dashboard", icon: Home, url: "/app/dashboard" },
   { title: "Room", icon: Phone, url: "/app/room" },
+  { title: "People", icon: Users, url: "/app/people" },
   { section: "Topics" },
   { title: "Generate a New Topic", icon: Sparkle, url: "/app/topics/generate" },
   { title: "Community Topics", icon: MessageSquare, url: "/app/topics/community" },
-  { section: "Participants" },
-  { title: "Learners", icon: Users, url: "/app/learners" },
-  { title: "Instructors", icon: UserCog, url: "/app/instructors" },
   { section: "Progress" },
   {title: "Learning", icon: BookOpen, url: "/app/learning"},
   { title: "Feedback", icon: MessageCircle, url: "/app/feedback" },

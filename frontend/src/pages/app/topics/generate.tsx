@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { TypographyH1, TypographyH2, TypographyMuted } from "@/components/base/Typography";
+import { TypographyH1, TypographyH2, TypographyMuted, TypographyP } from "@/components/base/Typography";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { RefreshCcw, Send, User, MessageSquare, AlignLeft, UserRoundPen, HelpCircle } from "lucide-react";
+import { RefreshCcw, Send, UserRoundPen, HelpCircle, Flame, Sword, GraduationCap, LandPlot } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -23,22 +23,53 @@ interface TopicFormData {
 // Example prompt suggestions - these could come from an API
 const initialPrompts = [
   {
-    title: "Should AI be regulated by governments?",
-    icon: <User className="h-5 w-5 text-muted-foreground" />,
+    title: "Should AI replace human workers?",
+    category: "Trending",
+    icon: <Flame className="h-5 w-5 text-muted-foreground" />,
   },
   {
-    title: "Is social media doing more harm than good to society?",
-    icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />,
+    title: "Should gene editing be allowed in humans?",
+    category: "Controversial",
+    icon: <Sword className="h-5 w-5 text-muted-foreground" />,
   },
   {
-    title: "Should higher education be free for all citizens?",
-    icon: <AlignLeft className="h-5 w-5 text-muted-foreground" />,
+    title: "Should school uniforms be mandatory?",
+    category: "Entry Level",
+    icon: <GraduationCap className="h-5 w-5 text-muted-foreground" />,
   },
   {
-    title: "Is space exploration worth the investment?",
-    icon: <MessageSquare className="h-5 w-5 text-muted-foreground" />,
+    title: "Should voting be mandatory?",
+    category: "Politics",
+    icon: <LandPlot className="h-5 w-5 text-muted-foreground" />,
   },
 ];
+
+const topicPools = {
+  trending: [
+    "Should AI replace human workers?",
+    "Is cryptocurrency the future of money?",
+    "Should social media platforms be broken up?",
+    "Is remote work here to stay?",
+  ],
+  controversial: [
+    "Should gene editing be allowed in humans?",
+    "Should billionaires exist?",
+    "Is nuclear energy the solution to climate change?",
+    "Should vaccines be mandatory?",
+  ],
+  entryLevel: [
+    "Should school uniforms be mandatory?",
+    "Should homework be abolished?",
+    "Are video games good for children?",
+    "Should junk food be banned in schools?",
+  ],
+  political: [
+    "Should voting be mandatory?",
+    "Should the voting age be lowered?",
+    "Should term limits exist for all political offices?",
+    "Should lobbying be banned?",
+  ],
+};
 
 export default function Page() {
   const { user } = useUser();
@@ -136,9 +167,29 @@ export default function Page() {
   };
 
   const refreshPrompts = () => {
-    // In a real app, this would fetch new prompts from an API
-    const shuffled = [...initialPrompts].sort(() => Math.random() - 0.5);
-    setPrompts(shuffled);
+    const newPrompts = [
+      {
+        title: topicPools.trending[Math.floor(Math.random() * topicPools.trending.length)],
+        category: "Trending",
+        icon: initialPrompts[0].icon,
+      },
+      {
+        title: topicPools.controversial[Math.floor(Math.random() * topicPools.controversial.length)],
+        category: "Controversial",
+        icon: initialPrompts[1].icon,
+      },
+      {
+        title: topicPools.entryLevel[Math.floor(Math.random() * topicPools.entryLevel.length)],
+        category: "Entry Level",
+        icon: initialPrompts[2].icon,
+      },
+      {
+        title: topicPools.political[Math.floor(Math.random() * topicPools.political.length)],
+        category: "Political",
+        icon: initialPrompts[3].icon,
+      },
+    ];
+    setPrompts(newPrompts);
   };
 
   return (
@@ -164,16 +215,17 @@ export default function Page() {
             {prompts.map((prompt, index) => (
               <Card
                 key={index}
-                className="p-6 cursor-pointer hover:bg-muted/50 transition-colors group"
+                className="p-4 cursor-pointer hover:bg-muted/50 transition-colors group"
                 onClick={() => setUserInput(prompt.title)}
               >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-start">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
                     {prompt.icon}
+                    <TypographyMuted>{prompt.category}</TypographyMuted>
                   </div>
-                  <p className="text-sm text-muted-foreground group-hover:text-primary transition-colors">
+                  <TypographyP className="text-muted-foreground group-hover:text-primary transition-colors">
                     {prompt.title}
-                  </p>
+                  </TypographyP>
                 </div>
               </Card>
             ))}

@@ -3,10 +3,9 @@ import { TypographyLarge } from "@/components/base/Typography";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { getMessages, sendMessage } from "@/server/resolver/chat";
+import { sendMessage } from "@/server/resolver/chat";
 import { ref, query, orderByChild, onValue, off } from "firebase/database";
-import { realtime_db as realtimeDb, firebase_auth as auth } from "@/config/firebase";
+import { realtime_db as realtimeDb } from "@/config/firebase";
 import { ChatCard } from "@/components/base/Cards";
 
 type ChatMessage = {

@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/config/theme-provider";
 import { AuthHeader, UnauthHeader } from "@/components/layout/Header";
 import { RoomProvider } from "@/components/providers/RoomProvider";
 import { FirebaseAuthProvider } from "@/components/providers/FirebaseAuthProvider";
+import { PrimeReactProvider } from "primereact/api";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -68,6 +69,8 @@ export default function App({ Component, pageProps }: AppProps) {
               <Footer />
             </>
           ) : isAppRoute ? (
+            <PrimeReactProvider>
+
             <RoomProvider>
               <div className="h-screen w-screen flex flex-col md:flex-row">
                 <SideBar />
@@ -79,6 +82,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 </div>
               </div>
             </RoomProvider>
+            </PrimeReactProvider>
           ) : (
             <>
               <BackgroundIllustration />
