@@ -102,7 +102,7 @@ export function UsersGrid({
       filter: true,
     },
     {
-      field: "dateJoined",
+      field: "createdAt",
       headerName: "Date Joined",
       flex: 1,
       cellClass: "ag-cell-left flex items-center",

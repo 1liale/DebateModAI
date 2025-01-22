@@ -14,6 +14,7 @@ import { CourseCard, StatCard, TopicCard } from "@/components/base/Cards";
 import { PrimaryCarousel } from "@/components/base/Carousel";
 import { DateRange } from "react-day-picker";
 import { useState } from "react";
+import { dashboardTopics as topics } from "@/lib/constants/topics_test"; // TODO: replace with actual topics data
 
 // Course Progress Cards
 const CourseCards = () => (
@@ -82,75 +83,6 @@ const StatsOverview = () => (
 
 // Debate Topics Carousel
 const DebateTopicsCarousel = () => {
-  const topics = {
-    trending: [
-      {
-        title: "AI Regulation",
-        engagement: "2.3k debates",
-        category: "Technology",
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-      },
-      {
-        title: "TEST",
-        engagement: "2.1k debates",
-        category: "Technology",
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-      },
-      {
-        title: "Universal Basic Income",
-        engagement: "1.8k debates",
-        category: "Economics",
-        image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e",
-      },
-      {
-        title: "Space Colonization",
-        engagement: "1.5k debates",
-        category: "Science",
-        image: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2",
-      },
-    ],
-    favorites: [
-      {
-        title: "Climate Change Solutions",
-        engagement: "Saved by 1.2k",
-        category: "Environment",
-        image: "https://images.unsplash.com/photo-1569163139599-0f4517e36f51",
-      },
-      {
-        title: "Digital Privacy Rights",
-        engagement: "Saved by 980",
-        category: "Technology",
-        image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f",
-      },
-      {
-        title: "Education Reform",
-        engagement: "Saved by 850",
-        category: "Education",
-        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b",
-      },
-    ],
-    controversial: [
-      {
-        title: "Social Media Impact",
-        engagement: "50/50 split",
-        category: "Society",
-        image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0",
-      },
-      {
-        title: "Genetic Engineering",
-        engagement: "51/49 split",
-        category: "Ethics",
-        image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31",
-      },
-      {
-        title: "Cryptocurrency Future",
-        engagement: "48/52 split",
-        category: "Finance",
-        image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d",
-      },
-    ],
-  };
-
   return (
     <div className="space-y-6 mb-8">
       {/* Trending Topics */}
@@ -161,8 +93,8 @@ const DebateTopicsCarousel = () => {
             <h3 className="text-xl font-semibold">Trending</h3>
           </div>
           <PrimaryCarousel itemCount={topics.trending.length}>
-            {topics.trending.map((topic, index) => (
-              <TopicCard description={""} difficulty={""} key={index} {...topic} />
+            {topics.trending.map(topic => (
+              <TopicCard key={topic.id} topic={topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>
@@ -176,8 +108,8 @@ const DebateTopicsCarousel = () => {
             <h3 className="text-xl font-semibold">Favorites</h3>
           </div>
           <PrimaryCarousel itemCount={topics.favorites.length}>
-            {topics.favorites.map((topic, index) => (
-              <TopicCard description={""} difficulty={""} key={index} {...topic} />
+            {topics.favorites.map(topic => (
+              <TopicCard key={topic.id} topic={topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>
@@ -191,8 +123,8 @@ const DebateTopicsCarousel = () => {
             <h3 className="text-xl font-semibold">Controversial</h3>
           </div>
           <PrimaryCarousel itemCount={topics.controversial.length}>
-            {topics.controversial.map((topic, index) => (
-              <TopicCard description={""} difficulty={""} key={index} {...topic} />
+            {topics.controversial.map(topic => (
+              <TopicCard key={topic.id} topic={topic} />
             ))}
           </PrimaryCarousel>
         </CardContent>
@@ -238,7 +170,7 @@ const UpcomingDebates = () => (
 );
 
 export default function DashboardPage() {
-  const { user, isLoaded } = useUser();
+  const { isLoaded } = useUser();
   const [date, setDate] = useState<DateRange | undefined>(undefined);
 
   if (!isLoaded) {

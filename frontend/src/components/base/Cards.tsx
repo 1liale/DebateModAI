@@ -9,6 +9,8 @@ import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/bas
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChatMessage } from '@/server/resolver/chat';
 import { User } from '@/lib/types/user';
+import { Topic } from '@/lib/types/topic';
+
 // Base color configurations
 export const cardColors = {
   blue: {
@@ -166,31 +168,20 @@ export function StatCard({
 
 // Topic Card Component
 interface TopicCardProps {
-  title: string;
-  description?: string;
-  metadata?: string;
-  difficulty?: string;
-  category: string;
-  roomIds?: string[];
-  slug?: string;
-  image?: string;
-  engagement?: string;
+  topic: Partial<Topic>;
 }
 
 export function TopicCard({
-  title,
-  description,
-  category,
-  image,
-  engagement,
+  topic
 }: TopicCardProps) {
+  const { title, description, category, image, engagement } = topic;
   return (
     <BaseCard className="overflow-hidden hover:shadow-lg transition-all">
       {image && (
         <div className="relative h-32 w-full">
           <Image
             src={image}
-            alt={title}
+            alt={title || ''}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

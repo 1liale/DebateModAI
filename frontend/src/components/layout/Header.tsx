@@ -44,7 +44,6 @@ export const Header = ({ children, className }: HeaderProps) => {
 
 export const UnauthHeader = () => {
   const { theme } = useTheme();
-  const pathname = usePathname();
 
   return (
     <Header>

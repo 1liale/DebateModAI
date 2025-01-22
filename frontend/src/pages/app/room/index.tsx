@@ -62,11 +62,6 @@ enum FormMode {
   JOIN_EXISTING
 }
 
-type FormView = {
-  mode: FormMode;
-  setMode: (mode: FormMode) => void;
-}
-
 const PrejoinScreen: React.FC<PrejoinScreenProps> = ({ onJoin }) => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [roomId, setRoomId] = useState<string>("");

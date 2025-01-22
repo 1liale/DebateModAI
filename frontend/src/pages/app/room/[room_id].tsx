@@ -20,7 +20,7 @@ import { doc, getDoc } from 'firebase/firestore';
 
 const Page = () => {
   const router = useRouter();
-  const { activeRoom, activeUsername, setActiveRoom, setActiveUsername } = useRoom();
+  const { activeUsername, setActiveUsername, setActiveRoom } = useRoom();
   const { room_id } = router.query as { room_id: string };
   const [token, setToken] = useState(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +68,6 @@ const Page = () => {
     };
 
     if (room_id) {
-      setActiveRoom(room_id as string);
       getToken();
     }
   }, [room_id, activeUsername]);
