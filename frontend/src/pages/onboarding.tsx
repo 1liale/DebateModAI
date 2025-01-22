@@ -17,60 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SegmentedProgressBar } from "@/components/base/Progress";
-
-const onboardingSteps = [
-  {
-    id: "welcome",
-    title: "Welcome to DebateModAI",
-    description: "We're excited to help you enhance your debate skills and knowledge. Let's get started by personalizing your experience.",
-    image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3",
-    cardTitle: "Welcome to DebateModAI",
-    cardDescription: "Your journey to becoming a better debater starts here"
-  },
-  {
-    id: "role",
-    title: "What brings you here?",
-    description: "Tell us about your role in debate.",
-    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3",
-    cardTitle: "Choose Your Path",
-    cardDescription: "Whether you're teaching or learning, we'll adapt to your needs"
-  },
-  {
-    id: "experience",
-    title: "Your Debate Experience",
-    description: "Help us tailor the experience to your level.",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3",
-    cardTitle: "Experience Matters",
-    cardDescription: "We'll customize content based on your expertise level"
-  },
-  {
-    id: "topics",
-    title: "Preferences",
-    description: "Tell us about topics that interests you!",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3",
-    cardTitle: "Discover Your Interests",
-    cardDescription: "Choose topics that spark your passion for debate"
-  },
-];
-
-const topicOptions = [
-  "Politics",
-  "Technology",
-  "Environment",
-  "Economics",
-  "Social Issues",
-  "Education",
-  "Healthcare",
-  "International Relations",
-  "Science",
-  "Ethics",
-  "Law",
-  "Culture",
-  "Media",
-  "Philosophy",
-  "Sports",
-  "Business"
-];
+import { Experience, Role, User } from "@/lib/types/user";
+import { topicOptions, onboardingSteps } from "@/lib/constants/onboarding";
 
 const totalSteps = onboardingSteps.length;
 
@@ -78,10 +26,11 @@ export default function OnboardingPage() {
   const router = useRouter();
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
-    role: "",
-    experience: "",
-    topics: [] as string[],
+  const [formData, setFormData] = useState<Partial<User>>({
+    role: undefined,
+    experience: undefined,
+    interests: [],
+    onboardingComplete: false,
   });
   const [showAllTopics, setShowAllTopics] = useState(false);
 
@@ -90,7 +39,8 @@ export default function OnboardingPage() {
       if (user) {
         await updateUser(user.id, {
           ...formData,
-          onboardingCompleted: true,
+          onboardingComplete: true,
+          interests: formData.interests || [],
         });
         router.push("/app/dashboard");
       }
@@ -151,7 +101,7 @@ export default function OnboardingPage() {
               {currentStep === 1 && (
                 <Select
                   value={formData.role}
-                  onValueChange={(value) =>
+                  onValueChange={(value: Role) =>
                     setFormData((prev) => ({ ...prev, role: value }))
                   }
                 >
@@ -168,7 +118,7 @@ export default function OnboardingPage() {
               {currentStep === 2 && (
                 <Select
                   value={formData.experience}
-                  onValueChange={(value) =>
+                  onValueChange={(value: Experience) =>
                     setFormData((prev) => ({ ...prev, experience: value }))
                   }
                 >
@@ -190,18 +140,23 @@ export default function OnboardingPage() {
                       <Button
                         key={topic}
                         variant="outline"
-                        onClick={() =>
-                          setFormData((prev) => ({
+                        onClick={() => {
+                          const currentInterests = formData.interests || [];
+                          const isSelected = currentInterests.includes(topic);
+                          
+                          setFormData(prev => ({
                             ...prev,
-                            topics: prev.topics.includes(topic)
-                              ? prev.topics.filter((t) => t !== topic)
-                              : prev.topics.length < 3
-                              ? [...prev.topics, topic]
-                              : prev.topics,
+                            interests: isSelected
+                              ? currentInterests.filter(t => t !== topic)
+                              : currentInterests.length < 3
+                                ? [...currentInterests, topic]
+                                : currentInterests
                           }))
-                        }
-                        className={`h-auto py-4 transition-all border-2 ${ formData.topics.includes(topic) && 'border-purple-500/50'}`}
-                        disabled={!formData.topics.includes(topic) && formData.topics.length >= 3}
+                        }}
+                        className={`h-auto py-4 transition-all border-2 ${
+                          formData.interests?.includes(topic) && 'border-purple-500/50'
+                        }`}
+                        disabled={!formData.interests?.includes(topic) && (formData.interests?.length || 0) >= 3}
                       >
                         {topic}
                       </Button>
@@ -238,7 +193,7 @@ export default function OnboardingPage() {
                     disabled={
                       (currentStep === 1 && !formData.role) ||
                       (currentStep === 2 && !formData.experience) ||
-                      (currentStep === 3 && formData.topics.length === 0)
+                      (currentStep === 3 && formData.interests?.length === 0)
                     }
                   >
                     {currentStep === onboardingSteps.length - 1 ? "Complete" : "Next"}

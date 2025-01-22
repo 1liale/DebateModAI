@@ -8,6 +8,7 @@ import { formatDate } from '@/lib/utils/date';
 import { TypographyH3, TypographyMuted, TypographySmall } from "@/components/base/Typography";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChatMessage } from '@/server/resolver/chat';
+import { User } from '@/lib/types/user';
 // Base color configurations
 export const cardColors = {
   blue: {
@@ -435,4 +436,32 @@ export function ChatCard({ message, isOwnMessage }: ChatCardProps) {
       </CardContent>
     </BaseCard>
   );
+}
+
+interface UserCardProps {
+  user: User;
+}
+
+export function UserCard({ user }: UserCardProps) {
+    return (
+        <BaseCard className="p-6 flex flex-col items-center">
+            <Avatar className="h-16 w-16 mb-4">
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback>
+                    {user.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+            </Avatar>
+        
+            <h3 className="font-semibold text-lg">{user.name}</h3>
+            <p className="text-gray-600">{user.email}</p>
+            <div className="mt-2 space-y-2">
+                <Badge variant={user.role === 'instructor' ? 'secondary' : 'default'}>
+                    {user.role.toUpperCase()}
+                </Badge>
+                <Badge variant={user.status === 'active' ? 'secondary' : 'destructive'}>
+                    {user.status.toUpperCase()}
+                </Badge>
+            </div>
+        </BaseCard>
+    );
 }

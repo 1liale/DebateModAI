@@ -10,7 +10,7 @@ import {
 } from 'ag-grid-community';
 import { useTheme } from 'next-themes';
 import { UsersGrid } from '@/components/users/UsersGrid';
-import { UserCard } from '@/components/users/UserCard';
+import { UserCard } from '@/components/base/Cards';
 import { testUsers } from '@/lib/constants/people_test';
 import { User } from '@/lib/types/user';
 import { SecondaryButton } from '@/components/base/Buttons';

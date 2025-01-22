@@ -1,5 +1,5 @@
 import { useVoiceAssistant, BarVisualizer } from '@livekit/components-react';
-import { CatVisualizer } from '@/components/CatVisualizer';
+import { CatVisualizer } from '@/components/misc/CatVisualizer';
 
 interface SimpleVoiceAssistantProps {
   custom_variant?: 'popcat' | 'bar';

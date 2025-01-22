@@ -77,11 +77,9 @@ export const UnauthHeader = () => {
               Support Us! ❤️
             </LinkButton>
             <SignedIn>
-              {!pathname.startsWith("/app") && (
-                <LinkButton href="/app/dashboard" variant="outline">
-                  Dashboard <ArrowUpRight className="h-3.5 w-3.5 ml-1.5" />
-                </LinkButton>
-              )}
+              <LinkButton href="/app" variant="outline">
+                Dashboard <ArrowUpRight className="h-3.5 w-3.5 ml-1.5" />
+              </LinkButton>
               <UserButton
                 appearance={{
                   elements: {
