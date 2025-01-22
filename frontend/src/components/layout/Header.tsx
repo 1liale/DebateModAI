@@ -71,7 +71,6 @@ export const UnauthHeader = () => {
             <LinkButton href="/faq">FAQ</LinkButton>
             <LinkButton
               href="https://donate.stripe.com/28o6ot2G00QZgQU8ww"
-              target="_blank"
               rel="noopener noreferrer"
               className="hover:text-brand/90"
             >
