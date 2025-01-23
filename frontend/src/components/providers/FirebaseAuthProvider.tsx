@@ -28,7 +28,7 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
 
   return <>{children}</>;
 }
-
+// Try not to touch this; should be correctly configured
 export const useFirebaseAuth = () => {
     const { getToken } = useAuth();
     const { user } = useUser();
@@ -52,15 +52,13 @@ export const useFirebaseAuth = () => {
   
           // Sign in to Firebase and get auth result
           const userCredential = await signInWithCustomToken(firebase_auth, token);
-          firebase_auth.updateCurrentUser(userCredential.user);
-  
+ 
           // Check if metadata indicates this is a first-time sign in
           const metadata = userCredential.user.metadata;
           const isNewUser = metadata.creationTime === metadata.lastSignInTime;
   
           // If this is a new user, create their profile in Firestore
           if (isNewUser) {
-            console.log("Creating new user in Firestore", user);
             await createUser(userCredential.user.uid, {
               displayName: user.fullName || user.username || '',
               email: user.primaryEmailAddress?.emailAddress || '',

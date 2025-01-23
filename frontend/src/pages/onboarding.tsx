@@ -22,6 +22,7 @@ import { topicOptions, onboardingSteps } from "@/lib/constants/onboarding";
 
 const totalSteps = onboardingSteps.length;
 
+// Users are still allowed to access this page even if they are already onboarded, will just update existing user data
 export default function OnboardingPage() {
   const router = useRouter();
   const { user } = useUser();
